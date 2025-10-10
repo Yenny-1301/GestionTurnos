@@ -1,0 +1,50 @@
+# Android/Gradle
+.gradle/
+local.properties
+/.idea/
+/build/
+/**/build/
+/captures/
+.externalNativeBuild/
+.cxx/
+
+# Android Studio
+*.iml
+*.iws
+*.ipr
+
+# Build outputs
+*.apk
+*.ap_
+*.aab
+*.keystore
+*.jks
+
+# Java
+*.class
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / tooling
+.idea/
+.idea/*
+
+# Android Studio generated files to ignore
+.idea/caches
+.idea/libraries
+.idea/modules.xml
+.idea/workspace.xml
+*.hprof
+
+# Node (if you use node/tools)
+node_modules/
+
+# environment files (if any)
+.env
+*.env
+
+# Misc
+.vscode/
