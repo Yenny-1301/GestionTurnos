@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="Turnos"
+        android:icon="@drawable/baseline_calendar_month_24"
+        android:id="@+id/turnos"
+        />
+    <item
+        android:title="Servicios"
+        android:icon="@drawable/sharp_add_comment_24"
+        android:id="@+id/servicios"
+        />
+    <item
+        android:title="Perfil"
+        android:icon="@drawable/sharp_person_24"
+        android:id="@+id/perfil"
+        />
+</menu>
