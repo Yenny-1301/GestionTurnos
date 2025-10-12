@@ -1,14 +1,20 @@
 package com.example.gestionturnos;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -18,22 +24,19 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.register);
 
         EditText correo = findViewById(R.id.textoInput);
-        EditText correoVerif = findViewById(R.id.textoInputVerif);
         EditText contrasenia = findViewById(R.id.textoPass);
         EditText contraseniaVerif = findViewById(R.id.textoPassVerif);
         Button iniciarSesion = findViewById(R.id.inicioSesion);
+        CheckBox terminosCond = findViewById(R.id.checkbox_terminos);
+        TextView checkboxError = findViewById(R.id.checkboxError);
 
         iniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean camposValidos = true;
-
+                // MANEJO DE ERRORS
                 if (correo.getText().toString().trim().isEmpty()) {
                     correo.setError("Ingresa tu correo");
-                    camposValidos = false;
-                }
-                if (correoVerif.getText().toString().trim().isEmpty()) {
-                    correoVerif.setError("Ingresa tu correo");
                     camposValidos = false;
                 }
 
@@ -45,11 +48,18 @@ public class RegisterActivity extends AppCompatActivity {
                     contraseniaVerif.setError("Ingresa tu contraseña");
                     camposValidos = false;
                 }
+                if (!terminosCond.isChecked()){
+                    checkboxError.setVisibility(View.VISIBLE);
+                    checkboxError.setText("Debes aceptar los Términos y condiciones");
+                    //terminosCond.setError("Debes aceptar los términos y condiciones");
+                    camposValidos = false;
+                }
 
                 if (camposValidos) {
-                    // Continuar con el inicio de sesión
-                    // Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    // startActivity(intent);
+                    // Continuar a iniciar sesion
+                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 EditText contrasenia = findViewById(R.id.textoPass);
                 EditText contraseniaVerif = findViewById(R.id.textoPassVerif);
@@ -94,5 +104,15 @@ public class RegisterActivity extends AppCompatActivity {
                 });
 
             }});
-        }
+                TextView ingresaAqui = findViewById(R.id.ingresaAqui);
+                    ingresaAqui.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
+
+    }
     }

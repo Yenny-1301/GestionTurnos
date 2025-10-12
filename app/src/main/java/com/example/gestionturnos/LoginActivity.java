@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,10 +38,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 if (camposValidos) {
-                    // Continuar con el inicio de sesión
-                    // Por ejemplo, abrir la pantalla principal:
-                    // Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    // startActivity(intent);
+                    // Continuar con el inicio de sesión si los campos fueron llenados correctamente
+                    Intent intent = new Intent(LoginActivity.this, TurnosFragment.class);
+                    startActivity(intent);
+                    finish(); // Cierra la pantalla de inicio seision (no se puede volver atras a la misma)
                 }
                 EditText contraseña = findViewById(R.id.textoPass);
                 ImageView iconoPass = findViewById(R.id.iconoPass);
@@ -65,6 +66,14 @@ public class LoginActivity extends AppCompatActivity {
                                                  }
                                              }
                 );
+                TextView registrateAqui = findViewById(R.id.registrateAqui);
+                registrateAqui.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                        startActivity(intent);
+                    }
+                });
             }
         });
     }}

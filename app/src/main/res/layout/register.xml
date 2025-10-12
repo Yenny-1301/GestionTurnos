@@ -5,7 +5,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@color/white">
         <!--  Layout TITULO -->
         <LinearLayout
             android:id="@+id/containerTitulo"
@@ -54,42 +55,6 @@
                     android:text="correo electrónico"/>
                 <EditText
                     android:id="@+id/textoInput"
-                    android:inputType="textEmailAddress"
-                    android:textColor="@color/negro_texto"
-                    android:textSize="16sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/campoCorreoVerif"
-            android:layout_marginBottom="26dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:background="@color/gray_input"
-            android:paddingVertical="8dp"
-            android:paddingHorizontal="15dp"
-            android:layout_marginHorizontal="41dp"
-            android:orientation="horizontal">
-            <!--  Layout INPUT CORREO CONTENIDO-->
-            <LinearLayout
-                android:id="@+id/inputCorreoVerif"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/tituloCorreoVerif"
-                    android:textColor="@color/gray_input_texto"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="confirmar correo electrónico"/>
-                <EditText
-                    android:id="@+id/textoInputVerif"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/negro_texto"
                     android:textSize="16sp"
@@ -186,17 +151,32 @@
                 android:scaleType="fitCenter"/>
         </LinearLayout>
         <!--  COPY terminos y condiciones .... -->
-        <CheckBox
-            android:id="@+id/checkbox_terminos"
-            android:layout_width="wrap_content"
-            android:layout_marginBottom="26dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/azul"
-            android:textStyle="bold"
-            android:buttonTint="@color/primaryViolet"
-            android:textSize="14sp"
-            android:layout_gravity="center_horizontal"
-            android:text="He leído y acepto los Términos y condiciones"/>
+            android:orientation="vertical">
+            <CheckBox
+                android:id="@+id/checkbox_terminos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/azul"
+                android:textStyle="bold"
+                android:buttonTint="@color/primaryViolet"
+                android:textSize="14sp"
+                android:layout_gravity="center"
+                android:text="He leído y acepto los Términos y condiciones"/>
+            <TextView
+                android:id="@+id/checkboxError"
+                android:textColor="@color/red"
+                android:textSize="12sp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textStyle="bold"
+                android:text=" "
+                android:layout_gravity="center"
+                android:layout_marginBottom="26dp"
+                />
+        </LinearLayout>
 
         <!--  BOTON INICIAR SESION .... -->
         <com.google.android.material.button.MaterialButton
@@ -206,7 +186,7 @@
             android:layout_marginBottom="26dp"/>
         <!--  COPY REGISTRATE .... -->
         <TextView
-            android:id="@+id/registrateAqui"
+            android:id="@+id/ingresaAqui"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
