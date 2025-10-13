@@ -1,0 +1,150 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:id="@+id/main" android:layout_width="match_parent" android:layout_height="match_parent" tools:context=".MainActivity">
+    <!--  Layout CONTENIDO -->
+    <LinearLayout
+        android:id="@+id/layoutPrincipal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/white">
+        <!--  Layout TITULO -->
+        <LinearLayout
+            android:id="@+id/containerTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="16dp"
+            android:layout_marginBottom="30dp"
+            tools:layout_editor_absoluteY="339dp">
+            <TextView
+                android:id="@+id/tituloBienvenida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Bienvenido"
+                android:textColor="#000000"
+                android:textSize="40sp"/>
+        </LinearLayout>
+        <!--  Layout INPUT CORREO -->
+        <LinearLayout
+            android:id="@+id/campoCorreo"
+            android:layout_marginBottom="26dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="@color/gray_input"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="15dp"
+            android:layout_marginHorizontal="41dp"
+            android:orientation="horizontal">
+            <!--  Layout INPUT CORREO CONTENIDO-->
+            <LinearLayout
+                android:id="@+id/inputCorreo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tituloCorreo"
+                    android:textColor="@color/gray_input_texto"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="1dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="correo electrónico"/>
+                <EditText
+                    android:id="@+id/textoInput"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/negro_texto"
+                    android:textSize="16sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/iconoCorreo"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="Icono de correo electrónico"
+                android:src="@drawable/icon_correo"
+                android:scaleType="fitCenter"/>
+        </LinearLayout>
+        <!--  Layout INPUT CONTRASEÑA -->
+        <LinearLayout
+            android:id="@+id/campoPass"
+            android:layout_marginBottom="26dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="@color/gray_input"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="15dp"
+            android:layout_marginHorizontal="41dp"
+            android:orientation="horizontal">
+            <!--  Layout INPUT CONTRASEÑA CONTENIDO-->
+            <LinearLayout
+                android:id="@+id/inputPass"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tituloPass"
+                    android:textColor="@color/gray_input_texto"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="1dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="contraseña"/>
+                <EditText
+                    android:id="@+id/textoPass"
+                    android:textColor="@color/negro_texto"
+                    android:textSize="16sp"
+                    android:inputType="textPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/iconoPass"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="Mostrar contraseña"
+                android:src="@drawable/icon_passclose"
+                android:scaleType="fitCenter"/>
+        </LinearLayout>
+        <!--  COPY OLVIDASTE .... -->
+        <TextView
+            android:id="@+id/olvidastePass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="¿Olvidaste tu contraseña?"
+            android:textColor="@color/azul"
+            android:gravity="center"
+            android:layout_marginBottom="26dp"
+            android:clickable="true"
+            android:focusable="true"/>
+        <!--  BOTON INICIAR SESION .... -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/inicioSesion"
+            style="@style/BotonInicio"
+            android:text="Iniciar sesión"
+            android:layout_marginBottom="20dp"/>
+        <!--  COPY REGISTRATE .... -->
+        <TextView
+            android:id="@+id/registrateAqui"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:text="¿No tienes cuenta? Regístrate"
+            android:textColor="@color/azul"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="15dp"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
