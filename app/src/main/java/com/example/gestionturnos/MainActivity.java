@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.gestionturnos.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TurnosFragment.NavigationHost {
 
     ActivityMainBinding binding;
 
@@ -22,28 +22,37 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFragment(new TurnosFragment());
+        replaceFragment(new TurnosFragment(), false);
 
         binding.bottomNavigationView.setOnItemSelectedListener(item ->{
 
             int itemId = item.getItemId();
 
-            if (itemId == R.id.turnos) {
-                replaceFragment(new TurnosFragment());
-            } else if (itemId == R.id.servicios) {
-                replaceFragment(new ServiciosFragment());
-            } else if (itemId == R.id.perfil) {
-                replaceFragment(new PerfilFragment());
+            if (itemId == R.id.turnosFragment) {
+                replaceFragment(new TurnosFragment(), false);
+            } else if (itemId == R.id.serviciosFragment) {
+                replaceFragment(new ServiciosFragment(), false);
+            } else if (itemId == R.id.perfilFragment) {
+                replaceFragment(new PerfilFragment(), false);
             }
 
             return  true;
         });
     }
 
-    private void replaceFragment(Fragment fragment){
+    @Override
+    public void navigateTo(Fragment fragment, boolean addToBackStack) {
+        replaceFragment(fragment, addToBackStack);
+    }
+    public void replaceFragment(Fragment fragment, boolean addToBackStack){
         FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayout, fragment);
-        fragmentTransaction.commit();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        transaction.replace(R.id.frameLayout, fragment);
+
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+        transaction.commit();
     }
 }

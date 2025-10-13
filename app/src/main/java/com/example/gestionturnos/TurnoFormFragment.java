@@ -1,0 +1,98 @@
+package com.example.gestionturnos;
+
+import android.os.Bundle;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+
+public class TurnoFormFragment extends Fragment {
+
+    private TextInputEditText etNombre, etApellido, etTelefono, etFecha, etHora, etNotas;
+    private AutoCompleteTextView actvServicio;
+    private MaterialButton btnGuardar, btnCancelar;
+
+    public TurnoFormFragment() {}
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_turno_form, container, false);
+
+        etNombre = view.findViewById(R.id.etNombre);
+        etApellido = view.findViewById(R.id.etApellido);
+        etTelefono = view.findViewById(R.id.etTelefono);
+        etFecha = view.findViewById(R.id.etFecha);
+        etHora = view.findViewById(R.id.etHora);
+        etNotas = view.findViewById(R.id.etNotas);
+        actvServicio = view.findViewById(R.id.actvServicio);
+        btnGuardar = view.findViewById(R.id.btnGuardar);
+        btnCancelar = view.findViewById(R.id.btnCancelar);
+
+        etFecha.setOnClickListener(v -> {
+            MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Select date")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds()) // Pre-select today's date
+                    .build();
+
+            datePicker.addOnPositiveButtonClickListener(selection -> {
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+                String formattedDate = sdf.format(new Date(selection));
+                etFecha.setText(formattedDate);
+            });
+
+            datePicker.show(getParentFragmentManager(), "DATE_PICKER");
+        });
+
+        configurarServicios();
+
+        btnGuardar.setOnClickListener(v -> guardarTurno(v));
+        btnCancelar.setOnClickListener(v -> closeFragment());
+
+        return view;
+    }
+
+    private void configurarServicios() {
+        String[] servicios = {"Corte simple", "Coloración", "Peinado"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, servicios);
+        actvServicio.setAdapter(adapter);
+    }
+
+    private void closeFragment() {
+        if (getParentFragmentManager().getBackStackEntryCount() > 0) {
+            getParentFragmentManager().popBackStack();
+        } else {
+            requireActivity().finish();
+        }
+    }
+    private void guardarTurno(View view) {
+        Turno nuevoTurno = new Turno(
+                etNombre.getText().toString(),
+                etApellido.getText().toString(),
+                etTelefono.getText().toString(),
+                actvServicio.getText().toString(),
+                etFecha.getText().toString(),
+                etHora.getText().toString(),
+                etNotas.getText().toString()
+        );
+
+        Bundle result = new Bundle();
+        result.putSerializable("turno", nuevoTurno);
+        getParentFragmentManager().setFragmentResult("nuevoTurnoRequest", result);
+        closeFragment();
+    }
+}

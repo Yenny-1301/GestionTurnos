@@ -4,16 +4,16 @@
     <item
         android:title="Turnos"
         android:icon="@drawable/baseline_calendar_month_24"
-        android:id="@+id/turnos"
+        android:id="@+id/turnosFragment"
         />
     <item
         android:title="Servicios"
         android:icon="@drawable/sharp_add_comment_24"
-        android:id="@+id/servicios"
+        android:id="@+id/serviciosFragment"
         />
     <item
         android:title="Perfil"
         android:icon="@drawable/sharp_person_24"
-        android:id="@+id/perfil"
+        android:id="@+id/perfilFragment"
         />
 </menu>
