@@ -111,7 +111,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:contentDescription="Mostrar contraseña"
-                android:src="@drawable/icon_passopen"
+                android:src="@drawable/icon_passclose"
                 android:scaleType="fitCenter"/>
         </LinearLayout>
         <!--  COPY OLVIDASTE .... -->

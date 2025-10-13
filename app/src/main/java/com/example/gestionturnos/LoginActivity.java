@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 boolean camposValidos = true;
-
+                //validacion de campos
                 if (correo.getText().toString().trim().isEmpty()) {
                     correo.setError("Ingresa tu correo");
                     camposValidos = false;
@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (camposValidos) {
                     // Continuar con el inicio de sesión si los campos fueron llenados correctamente
-                    Intent intent = new Intent(LoginActivity.this, TurnosFragment.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish(); // Cierra la pantalla de inicio seision (no se puede volver atras a la misma)
                 }
@@ -54,11 +54,11 @@ public class LoginActivity extends AppCompatActivity {
                         if (visible) {
                             // Ocultar contraseña
                             contraseña.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            iconoPass.setImageResource(R.drawable.icon_passopen);
+                            iconoPass.setImageResource(R.drawable.icon_passclose);
                         } else {
                             // Mostrar contraseña
                             contraseña.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            iconoPass.setImageResource(R.drawable.icon_passclose);
+                            iconoPass.setImageResource(R.drawable.icon_passopen);
                         }
                         visible = !visible;
                         // Mantener el cursor al final
@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                                                  }
                                              }
                 );
+                //linkeo a la pantalla de registro
                 TextView registrateAqui = findViewById(R.id.registrateAqui);
                 registrateAqui.setOnClickListener(new View.OnClickListener() {
                     @Override

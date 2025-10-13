@@ -10,11 +10,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.snackbar.Snackbar;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -48,10 +46,10 @@ public class RegisterActivity extends AppCompatActivity {
                     contraseniaVerif.setError("Ingresa tu contraseña");
                     camposValidos = false;
                 }
+                //el checkbox debe estar chequeado
                 if (!terminosCond.isChecked()){
                     checkboxError.setVisibility(View.VISIBLE);
                     checkboxError.setText("Debes aceptar los Términos y condiciones");
-                    //terminosCond.setError("Debes aceptar los términos y condiciones");
                     camposValidos = false;
                 }
 
@@ -67,7 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
                 ImageView iconoPass = findViewById(R.id.iconoPass);
                 ImageView iconoPassVerif = findViewById(R.id.iconoPassVerif);
 
-// Toggle para contraseña principal
+                // Toggle mostrar contraseña
                 iconoPass.setOnClickListener(new View.OnClickListener() {
                     boolean visible = false;
 
@@ -75,17 +73,17 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         if (visible) {
                             contrasenia.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            iconoPass.setImageResource(R.drawable.icon_passopen);
+                            iconoPass.setImageResource(R.drawable.icon_passclose);
                         } else {
                             contrasenia.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            iconoPass.setImageResource(R.drawable.icon_passclose);
+                            iconoPass.setImageResource(R.drawable.icon_passopen);
                         }
                         visible = !visible;
                         contrasenia.setSelection(contrasenia.getText().length());
                     }
                 });
 
-// Toggle para verificación de contraseña
+                // Toggle mostrar contraseña para verificación
                 iconoPassVerif.setOnClickListener(new View.OnClickListener() {
                     boolean visible = false;
 
@@ -93,10 +91,10 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         if (visible) {
                             contraseniaVerif.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            iconoPassVerif.setImageResource(R.drawable.icon_passopen);
+                            iconoPassVerif.setImageResource(R.drawable.icon_passclose);
                         } else {
                             contraseniaVerif.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            iconoPassVerif.setImageResource(R.drawable.icon_passclose);
+                            iconoPassVerif.setImageResource(R.drawable.icon_passopen);
                         }
                         visible = !visible;
                         contraseniaVerif.setSelection(contraseniaVerif.getText().length());
