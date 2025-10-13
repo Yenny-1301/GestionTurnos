@@ -148,7 +148,8 @@
                 android:layout_height="24dp"
                 android:contentDescription="Mostrar contraseña"
                 android:src="@drawable/icon_passclose"
-                android:scaleType="fitCenter"/>
+                android:scaleType="fitCenter"
+                />
         </LinearLayout>
         <!--  COPY terminos y condiciones .... -->
         <LinearLayout
@@ -183,7 +184,7 @@
             android:id="@+id/inicioSesion"
             style="@style/BotonInicio"
             android:text="Registrate"
-            android:layout_marginBottom="26dp"/>
+            android:layout_marginBottom="20dp"/>
         <!--  COPY REGISTRATE .... -->
         <TextView
             android:id="@+id/ingresaAqui"
@@ -192,6 +193,7 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:text="¿Ya tienes una cuenta? Ingresa aquí"
+            android:padding="15dp"
             android:textColor="@color/azul"
             android:gravity="center"
             android:clickable="true"
