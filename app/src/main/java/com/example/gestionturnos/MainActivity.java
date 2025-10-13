@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.gestionturnos.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity implements TurnosFragment.NavigationHost {
+public class MainActivity extends AppCompatActivity implements TurnosFragment.NavigationHost, ServiciosFragment.NavigationHost {
 
     ActivityMainBinding binding;
 
