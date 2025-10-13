@@ -14,4 +14,7 @@
     <color name="outlineSec">#CAC4D0</color>
     <color name="fondoBtnClose">#E5E5E5</color>
     <color name="greySecondary">#8C8C8C</color>
+    <color name="lila">#C084FC</color>
+    <color name="purpura">#A855F7</color>
+    <color name="rojo">#EF4444</color>
 </resources>

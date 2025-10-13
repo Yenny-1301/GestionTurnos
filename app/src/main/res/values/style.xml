@@ -1,5 +1,7 @@
 <resources>
-    <!--  BOTON INICIAR SESION .... -->
+    <style name="PlaceholderBlack" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/gray_input</item>
+    </style>
     <style name="BotonInicio">
         <item name="android:layout_width">192dp</item>
         <item name="android:layout_height">56dp</item>
