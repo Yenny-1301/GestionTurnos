@@ -34,7 +34,7 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/rr8xm1l0eaff"
+                android:id="@+id/cerrarSesion"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:src="@drawable/logout_04"

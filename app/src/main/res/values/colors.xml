@@ -12,4 +12,6 @@
     <color name="greyBackground">#0A000000</color>
     <color name="surface">#FEF7FF</color>
     <color name="outlineSec">#CAC4D0</color>
+    <color name="fondoBtnClose">#E5E5E5</color>
+    <color name="greySecondary">#8C8C8C</color>
 </resources>

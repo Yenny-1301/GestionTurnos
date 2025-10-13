@@ -1,5 +1,9 @@
 package com.example.gestionturnos;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +11,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
+
+import com.google.android.material.button.MaterialButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +67,47 @@ public class PerfilFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_perfil, container, false);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_perfil, container, false);
+        //return inflater.inflate(R.layout.fragment_perfil, container, false);
+        //cerrar sesion
+        ImageView btnCerrarSesion = view.findViewById(R.id.cerrarSesion);
+        btnCerrarSesion.setOnClickListener(v -> mostrarDialogCerrarSesion());
+        return view;
+
+    }
+    private void mostrarDialogCerrarSesion() {
+        // Crear el dialogo
+        Dialog dialog = new Dialog(requireContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_logout);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCancelable(true);
+
+        // Botones del dialogo
+        MaterialButton btnCerrar = dialog.findViewById(R.id.btnCerrar);
+        Button btnVolver = dialog.findViewById(R.id.btnVolver);
+        Button btnSalir = dialog.findViewById(R.id.btnCerrarSesion);
+
+        // cerrar el dialogo con el boton X y el boton volver
+        btnCerrar.setOnClickListener(v -> dialog.dismiss());
+        btnVolver.setOnClickListener(v -> dialog.dismiss());
+
+        // Botón Cerrar sesion, cierra el dialgo y cierra la sesion del usuario
+        btnSalir.setOnClickListener(v -> {
+            dialog.dismiss();
+            cerrarSesion();
+        });
+
+        dialog.show();
+    }
+
+    private void cerrarSesion() {
+        // cierra sesion y envia al usuario a LogIn
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        getActivity().finish();
     }
 }

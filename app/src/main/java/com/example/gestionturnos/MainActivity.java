@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        //replaceFragment(new TurnosFragment());
+        //replaceFragment(new TurnosFragment()); <-- descomentar para ver la app completa por ahora solo muestra el perfil
         replaceFragment(new PerfilFragment());
 
         binding.bottomNavigationView.setOnItemSelectedListener(item ->{
