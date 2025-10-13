@@ -7,7 +7,14 @@
     <color name="negro_texto">#1D1B20</color>
     <color name="azul">#0088FF</color>
     <color name="green">#34C759</color>
-    <color name="rojo">#FF383C</color>
-    <color name="lila">#FEF7FF</color>
-    <color name="purpura">#6750A4</color>
+    <color name="primaryViolet">#6750A4</color>
+    <color name="red">#FF383C</color>
+    <color name="greyBackground">#0A000000</color>
+    <color name="surface">#FEF7FF</color>
+    <color name="outlineSec">#CAC4D0</color>
+    <color name="fondoBtnClose">#E5E5E5</color>
+    <color name="greySecondary">#8C8C8C</color>
+    <color name="lila">#C084FC</color>
+    <color name="purpura">#A855F7</color>
+    <color name="rojo">#EF4444</color>
 </resources>
