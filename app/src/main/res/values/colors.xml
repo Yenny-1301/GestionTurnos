@@ -9,4 +9,7 @@
     <color name="green">#34C759</color>
     <color name="primaryViolet">#6750A4</color>
     <color name="red">#FF383C</color>
+    <color name="greyBackground">#0A000000</color>
+    <color name="surface">#FEF7FF</color>
+    <color name="outlineSec">#CAC4D0</color>
 </resources>
