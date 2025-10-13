@@ -61,7 +61,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginEnd="0dp"
-                android:contentDescription="Editar Servicio"
+                android:contentDescription="Eliminar Servicio"
                 app:backgroundTint="@android:color/transparent"
                 app:icon="@drawable/outline_delete_24"
                 app:iconSize="25dp"

@@ -1,8 +1,11 @@
 package com.example.gestionturnos;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,11 +20,26 @@ import java.util.List;
 
 public class ServiciosFragment extends Fragment {
 
+    public interface NavigationHost { // Debe ser public
+        void navigateTo(Fragment fragment, boolean addToBackStack);
+    }
     private RecyclerView recyclerView;
     private ServicioAdapter adapter;
     private List<Servicio> listaServicios;
 
-    public ServiciosFragment() { }
+    public ServiciosFragment() {
+        if(listaServicios == null) {
+            listaServicios = new ArrayList<>();
+        }
+    }
+
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (!(context instanceof NavigationHost)) {
+            throw new RuntimeException(context.toString()
+                    + " debe implementar NavigationHost");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,25 +50,30 @@ public class ServiciosFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rvServicios);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        listaServicios = new ArrayList<>();
-        cargarServiciosEjemplo();
-
         adapter = new ServicioAdapter(listaServicios);
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton fab = view.findViewById(R.id.fabAddServicio);
+
         fab.setOnClickListener(v -> {
-            // Por ahora solo agregamos un ejemplo al presionar el botón
-            listaServicios.add(new Servicio("Nuevo Servicio", "30min", "$18000"));
-            adapter.notifyItemInserted(listaServicios.size() - 1);
+            ((NavigationHost) requireActivity()).navigateTo(
+                    new ServicioNuevoFragment(),
+                    true
+            );
         });
 
-        return view;
-    }
+        getParentFragmentManager().setFragmentResultListener("nuevoServicioRequest", this,
+                new FragmentResultListener() {
+                    @Override
+                    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                        Servicio nuevoServicio = (Servicio) result.getSerializable("servicio");
+                        if (nuevoServicio != null) {
+                            listaServicios.add(nuevoServicio);
+                            adapter.notifyItemInserted(listaServicios.size() - 1);
+                        }
+                    }
+                });
 
-    private void cargarServiciosEjemplo() {
-        listaServicios.add(new Servicio("Corte", "30min", "$34000"));
-        listaServicios.add(new Servicio("Capping", "60min", "$60000"));
-        listaServicios.add(new Servicio("Tratamiento Capilar", "45min", "$46000"));
+        return view;
     }
 }
