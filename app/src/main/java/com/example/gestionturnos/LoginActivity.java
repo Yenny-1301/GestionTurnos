@@ -1,6 +1,7 @@
 package com.example.gestionturnos;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -68,6 +69,11 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 if (camposValidos) {
+                    // guardar estado de logueado del usuario
+                    SharedPreferences prefs = getSharedPreferences("AppPref", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean("isLoggedIn", true);
+                    editor.apply();
                     // Continuar con el inicio de sesión si los campos fueron llenados correctamente
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);

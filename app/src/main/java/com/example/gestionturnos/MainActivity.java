@@ -1,5 +1,7 @@
 package com.example.gestionturnos;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -12,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.gestionturnos.databinding.ActivityMainBinding;
+import com.google.android.material.color.DynamicColors;
 
 public class MainActivity extends AppCompatActivity implements TurnosFragment.NavigationHost, ServiciosFragment.NavigationHost {
 
@@ -20,9 +23,20 @@ public class MainActivity extends AppCompatActivity implements TurnosFragment.Na
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // verificar si el usuario hizo log in
+        SharedPreferences prefs = getSharedPreferences("AppPref", MODE_PRIVATE);
+        boolean isLoggedIn = prefs.getBoolean("isLoggedIn", false);
+        //si no
+        if(!isLoggedIn){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+        ///DynamicColors.applyToActivitiesIfAvailable(MainActivity.this.getApplication());
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFragment(new TurnosFragment(), false);
+        //replaceFragment(new TurnosFragment(), false);
 
         binding.bottomNavigationView.setOnItemSelectedListener(item ->{
 
