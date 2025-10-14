@@ -36,8 +36,10 @@ public class MainActivity extends AppCompatActivity implements TurnosFragment.Na
         ///DynamicColors.applyToActivitiesIfAvailable(MainActivity.this.getApplication());
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        //replaceFragment(new TurnosFragment(), false);
-
+        //cargar turnos como HOME
+        if (savedInstanceState == null) { // Solo si no hay estado guardado
+            replaceFragment(new TurnosFragment(), false);
+        }
         binding.bottomNavigationView.setOnItemSelectedListener(item ->{
 
             int itemId = item.getItemId();
