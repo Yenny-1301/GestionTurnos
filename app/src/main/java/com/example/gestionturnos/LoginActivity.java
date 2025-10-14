@@ -21,6 +21,36 @@ public class LoginActivity extends AppCompatActivity {
         EditText correo = findViewById(R.id.textoInput);
         EditText contraseña = findViewById(R.id.textoPass);
         Button iniciarSesion = findViewById(R.id.inicioSesion);
+        ImageView iconoPass = findViewById(R.id.iconoPass);
+        TextView registrateAqui = findViewById(R.id.registrateAqui);
+
+        iconoPass.setOnClickListener(new View.OnClickListener() {
+            boolean visible = false;
+
+            @Override
+            public void onClick(View v) {
+             if (visible) {
+                 // Ocultar contraseña
+                 contraseña.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                 iconoPass.setImageResource(R.drawable.icon_passclose);
+             } else {
+                 // Mostrar contraseña
+                 contraseña.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                 iconoPass.setImageResource(R.drawable.icon_passopen);
+             }
+             visible = !visible;
+             // Mantener el cursor al final
+             contraseña.setSelection(contraseña.getText().length());
+            }
+            });
+        //linkeo a la pantalla de registro
+        registrateAqui.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
 
         iniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,38 +73,6 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish(); // Cierra la pantalla de inicio seision (no se puede volver atras a la misma)
                 }
-                EditText contraseña = findViewById(R.id.textoPass);
-                ImageView iconoPass = findViewById(R.id.iconoPass);
-
-                iconoPass.setOnClickListener(new View.OnClickListener() {
-                    boolean visible = false;
-
-                    @Override
-                    public void onClick(View v) {
-                        if (visible) {
-                            // Ocultar contraseña
-                            contraseña.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            iconoPass.setImageResource(R.drawable.icon_passclose);
-                        } else {
-                            // Mostrar contraseña
-                            contraseña.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            iconoPass.setImageResource(R.drawable.icon_passopen);
-                        }
-                        visible = !visible;
-                        // Mantener el cursor al final
-                        contraseña.setSelection(contraseña.getText().length());
-                                                 }
-                                             }
-                );
-                //linkeo a la pantalla de registro
-                TextView registrateAqui = findViewById(R.id.registrateAqui);
-                registrateAqui.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                        startActivity(intent);
-                    }
-                });
             }
         });
     }}
