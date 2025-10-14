@@ -13,6 +13,7 @@ import android.widget.AutoCompleteTextView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,9 +22,14 @@ import java.util.Locale;
 
 public class TurnoFormFragment extends Fragment {
 
-    private TextInputEditText etNombre, etApellido, etTelefono, etFecha, etHora, etNotas;
+    private TextInputEditText etNombre, etApellido, etTelefono, etFecha, etHora, etNotas ;
     private AutoCompleteTextView actvServicio;
+
+    private MaterialTextView etTitulo;
     private MaterialButton btnGuardar, btnCancelar;
+    private Turno turnoOriginal;
+    public static final String REQUEST_KEY_NUEVO = "nuevoTurnoRequest";
+    public static final String REQUEST_KEY_EDITADO = "turnoEditadoRequest";
 
     public TurnoFormFragment() {}
 
@@ -38,6 +44,7 @@ public class TurnoFormFragment extends Fragment {
         etFecha = view.findViewById(R.id.etFecha);
         etHora = view.findViewById(R.id.etHora);
         etNotas = view.findViewById(R.id.etNotas);
+        etTitulo = view.findViewById(R.id.tvTituloFormulario);
         actvServicio = view.findViewById(R.id.actvServicio);
         btnGuardar = view.findViewById(R.id.btnGuardar);
         btnCancelar = view.findViewById(R.id.btnCancelar);
@@ -80,19 +87,64 @@ public class TurnoFormFragment extends Fragment {
         }
     }
     private void guardarTurno(View view) {
+
+        final String requestKey;
+        final Turno turnoParaEnviar;
+        if (turnoOriginal != null) {
+            requestKey = REQUEST_KEY_EDITADO;
+            turnoParaEnviar = turnoOriginal;
+
+        } else {
+            requestKey = REQUEST_KEY_NUEVO;
+            turnoParaEnviar = new Turno();
+        }
+
+        turnoParaEnviar.setNombreCliente(etNombre.getText().toString());
+        turnoParaEnviar.setApellidoCliente(etApellido.getText().toString());
+        turnoParaEnviar.setContacto(etTelefono.getText().toString());
+        turnoParaEnviar.setServicio(actvServicio.getText().toString());
+        turnoParaEnviar.setFecha(etFecha.getText().toString());
+        turnoParaEnviar.setHora(etHora.getText().toString());
+        turnoParaEnviar.setComentarios(etNotas.getText().toString());
+
         Turno nuevoTurno = new Turno(
-                etNombre.getText().toString(),
+                etNombre.getText().toString() ,
                 etApellido.getText().toString(),
-                etTelefono.getText().toString(),
-                actvServicio.getText().toString(),
                 etFecha.getText().toString(),
                 etHora.getText().toString(),
+                etTelefono.getText().toString(),
+                actvServicio.getText().toString(),
                 etNotas.getText().toString()
         );
 
         Bundle result = new Bundle();
-        result.putSerializable("turno", nuevoTurno);
-        getParentFragmentManager().setFragmentResult("nuevoTurnoRequest", result);
+        result.putSerializable("turno", turnoParaEnviar);
+        getParentFragmentManager().setFragmentResult(requestKey, result);
+
         closeFragment();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Turno turno = null;
+        if (getArguments() != null) {
+            turno = (Turno) getArguments().getSerializable("turno");
+            turnoOriginal = (Turno) getArguments().getSerializable("turno");
+        }
+
+        if (turnoOriginal != null) {
+            etTitulo.setText("Editar Turno");
+            etNombre.setText(turno.getNombreCliente());
+            etApellido.setText(turno.getApellidoCliente());
+            etTelefono.setText(turno.getContacto());
+            actvServicio.setText(turno.getServicio(), false);
+            etFecha.setText(turno.getFecha());
+            etHora.setText(turno.getHora());
+            etNotas.setText(turno.getComentarios());
+        } else {
+            etTitulo.setText("Nuevo Turno");
+        }
     }
 }
