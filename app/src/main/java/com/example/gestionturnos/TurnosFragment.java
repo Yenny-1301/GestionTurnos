@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,7 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TurnosFragment extends Fragment {
+public class TurnosFragment extends Fragment  implements TurnoAdapter.OnEditClickListener, TurnoAdapter.OnStatusChangeListener{
 
     public interface NavigationHost { // Debe ser public
         void navigateTo(Fragment fragment, boolean addToBackStack);
@@ -52,6 +51,11 @@ public class TurnosFragment extends Fragment {
 
         adapter = new TurnoAdapter(listaTurnos);
         recyclerView.setAdapter(adapter);
+        adapter.setOnEditClickListener(this);
+        adapter.setOnStatusChangeListener(this);
+
+        final String REQUEST_KEY_NUEVO = TurnoFormFragment.REQUEST_KEY_NUEVO;
+        final String REQUEST_KEY_EDITADO = TurnoFormFragment.REQUEST_KEY_EDITADO;
 
         FloatingActionButton fab = view.findViewById(R.id.fabAddTurno);
 
@@ -62,18 +66,51 @@ public class TurnosFragment extends Fragment {
             );
         });
 
-        getParentFragmentManager().setFragmentResultListener("nuevoTurnoRequest", this,
-                new FragmentResultListener() {
-                    @Override
-                    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                        Turno nuevoTurno = (Turno) result.getSerializable("turno");
-                        if (nuevoTurno != null) {
-                            listaTurnos.add(nuevoTurno);
-                            adapter.notifyItemInserted(listaTurnos.size() - 1);
-                        }
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_NUEVO, this,
+                (requestKey, result) -> {
+                    Turno nuevoTurno = (Turno) result.getSerializable("turno");
+                    if (nuevoTurno != null) {
+                        listaTurnos.add(nuevoTurno);
+                        adapter.notifyItemInserted(listaTurnos.size() - 1);
+                    }
+                });
+
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_EDITADO, this,
+                (requestKey, result) -> {
+                    Turno turnoEditado = (Turno) result.getSerializable("turno");
+                    if (turnoEditado == null) return;
+                    int position = listaTurnos.indexOf(turnoEditado);
+
+                    if (position != -1) {
+                        listaTurnos.set(position, turnoEditado);
+                        adapter.notifyItemChanged(position);
                     }
                 });
 
         return view;
     }
+    @Override
+    public void onEditClick(Turno turno) {
+        TurnoFormFragment formFragment = new TurnoFormFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("turno", turno);
+        formFragment.setArguments(args);
+
+        ((NavigationHost) requireActivity()).navigateTo(
+                formFragment,
+                true
+        );
+    }
+    @Override
+    public void onStatusChange(Turno turno, String nuevoEstado) {
+
+        int position = listaTurnos.indexOf(turno);
+
+        if (position != -1) {
+            Turno turnoActualizar = listaTurnos.get(position);
+            turnoActualizar.setEstado(nuevoEstado);
+            adapter.notifyItemChanged(position);
+        }
+    }
+
 }
