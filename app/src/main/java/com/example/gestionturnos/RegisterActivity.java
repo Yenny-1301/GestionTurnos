@@ -28,6 +28,53 @@ public class RegisterActivity extends AppCompatActivity {
         CheckBox terminosCond = findViewById(R.id.checkbox_terminos);
         TextView checkboxError = findViewById(R.id.checkboxError);
 
+
+        ImageView iconoPass = findViewById(R.id.iconoPass);
+        ImageView iconoPassVerif = findViewById(R.id.iconoPassVerif);
+
+        // Toggle mostrar contraseña
+        iconoPass.setOnClickListener(new View.OnClickListener() {
+            boolean visible = false;
+
+            @Override
+            public void onClick(View v) {
+                if (visible) {
+                    contrasenia.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    iconoPass.setImageResource(R.drawable.icon_passclose);
+                } else {
+                    contrasenia.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    iconoPass.setImageResource(R.drawable.icon_passopen);
+                }
+                visible = !visible;
+                contrasenia.setSelection(contrasenia.getText().length());
+            }
+        });
+
+        // Toggle mostrar contraseña para verificación
+        iconoPassVerif.setOnClickListener(new View.OnClickListener() {
+            boolean visible = false;
+
+            @Override
+            public void onClick(View v) {
+                if (visible) {
+                    contraseniaVerif.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    iconoPassVerif.setImageResource(R.drawable.icon_passclose);
+                } else {
+                    contraseniaVerif.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    iconoPassVerif.setImageResource(R.drawable.icon_passopen);
+                }
+                visible = !visible;
+                contraseniaVerif.setSelection(contraseniaVerif.getText().length());
+            }
+        });
+        TextView ingresaAqui = findViewById(R.id.ingresaAqui);
+                            ingresaAqui.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
         iniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,71 +93,20 @@ public class RegisterActivity extends AppCompatActivity {
                     contraseniaVerif.setError("Ingresa tu contraseña");
                     camposValidos = false;
                 }
+                if (!contrasenia.getText().toString().trim().equals(contraseniaVerif.getText().toString().trim())) {
+                    contraseniaVerif.setError("Contraseña no coincide");
+                    camposValidos = false;
+                }
                 //el checkbox debe estar chequeado
                 if (!terminosCond.isChecked()){
                     checkboxError.setVisibility(View.VISIBLE);
                     checkboxError.setText("Debes aceptar los Términos y condiciones");
                     camposValidos = false;
                 }
-
                 if (camposValidos) {
                     // Continuar a iniciar sesion
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
-                }
-                EditText contrasenia = findViewById(R.id.textoPass);
-                EditText contraseniaVerif = findViewById(R.id.textoPassVerif);
-
-                ImageView iconoPass = findViewById(R.id.iconoPass);
-                ImageView iconoPassVerif = findViewById(R.id.iconoPassVerif);
-
-                // Toggle mostrar contraseña
-                iconoPass.setOnClickListener(new View.OnClickListener() {
-                    boolean visible = false;
-
-                    @Override
-                    public void onClick(View v) {
-                        if (visible) {
-                            contrasenia.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            iconoPass.setImageResource(R.drawable.icon_passclose);
-                        } else {
-                            contrasenia.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            iconoPass.setImageResource(R.drawable.icon_passopen);
-                        }
-                        visible = !visible;
-                        contrasenia.setSelection(contrasenia.getText().length());
-                    }
-                });
-
-                // Toggle mostrar contraseña para verificación
-                iconoPassVerif.setOnClickListener(new View.OnClickListener() {
-                    boolean visible = false;
-
-                    @Override
-                    public void onClick(View v) {
-                        if (visible) {
-                            contraseniaVerif.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            iconoPassVerif.setImageResource(R.drawable.icon_passclose);
-                        } else {
-                            contraseniaVerif.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            iconoPassVerif.setImageResource(R.drawable.icon_passopen);
-                        }
-                        visible = !visible;
-                        contraseniaVerif.setSelection(contraseniaVerif.getText().length());
-                    }
-                });
-
-            }});
-                TextView ingresaAqui = findViewById(R.id.ingresaAqui);
-                    ingresaAqui.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                    }
-                });
-
-
-    }
-    }
+                }}
+    });}};
