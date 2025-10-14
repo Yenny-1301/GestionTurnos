@@ -18,20 +18,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiciosFragment extends Fragment {
+public class ServiciosFragment extends Fragment implements ServicioAdapter.OnEditClickListener{
 
     public interface NavigationHost { // Debe ser public
         void navigateTo(Fragment fragment, boolean addToBackStack);
     }
     private RecyclerView recyclerView;
     private ServicioAdapter adapter;
-    private List<Servicio> listaServicios;
-
-    public ServiciosFragment() {
-        if(listaServicios == null) {
-            listaServicios = new ArrayList<>();
-        }
-    }
+    private List<Servicio> listaServicios = new ArrayList<>();
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -53,6 +47,10 @@ public class ServiciosFragment extends Fragment {
 
         adapter = new ServicioAdapter(listaServicios);
         recyclerView.setAdapter(adapter);
+        adapter.setOnEditClickListener(this);
+
+        final String REQUEST_KEY_NUEVO = ServicioNuevoFragment.REQUEST_KEY_NUEVO;
+        final String REQUEST_KEY_EDITADO = ServicioNuevoFragment.REQUEST_KEY_EDITADO;
 
         FloatingActionButton fab = view.findViewById(R.id.fabAddServicio);
 
@@ -63,18 +61,37 @@ public class ServiciosFragment extends Fragment {
             );
         });
 
-        getParentFragmentManager().setFragmentResultListener("nuevoServicioRequest", this,
-                new FragmentResultListener() {
-                    @Override
-                    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_NUEVO, getViewLifecycleOwner(),
+                (requestKey, result) -> {
                         Servicio nuevoServicio = (Servicio) result.getSerializable("servicio");
                         if (nuevoServicio != null) {
                             listaServicios.add(nuevoServicio);
                             adapter.notifyItemInserted(listaServicios.size() - 1);
                         }
+                });
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_EDITADO, getViewLifecycleOwner(),
+                (requestKey, result) -> {
+                    Servicio servicioEditado = (Servicio) result.getSerializable("servicio");
+                    if (servicioEditado == null) return;
+                    int position = listaServicios.indexOf(servicioEditado);
+
+                    if (position != -1) {
+                        listaServicios.set(position, servicioEditado);
+                        adapter.notifyItemChanged(position);
                     }
                 });
-
         return view;
+    }
+    @Override
+    public void onEditClick(Servicio servicio) {
+        ServicioNuevoFragment formFragment = new ServicioNuevoFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("servicio", servicio);
+        formFragment.setArguments(args);
+
+        ((NavigationHost) requireActivity()).navigateTo(
+                formFragment,
+                true
+        );
     }
 }

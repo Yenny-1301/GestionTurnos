@@ -56,7 +56,7 @@
 
             <!--Boton Eliminar Servicio-->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnEditar2"
+                android:id="@+id/btnEliminar"
                 style="@style/Widget.Material3.Button.Icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
