@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.google.android.material.button.MaterialButton;
+import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -48,6 +50,29 @@ public class ServiciosFragment extends Fragment implements ServicioAdapter.OnEdi
         adapter = new ServicioAdapter(listaServicios);
         recyclerView.setAdapter(adapter);
         adapter.setOnEditClickListener(this);
+
+        adapter.setOnDeleteClickListener((servicio, position) -> {
+            View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_eliminar_servicio, null);
+
+            AlertDialog dialog = new AlertDialog.Builder(getContext())
+                    .setView(dialogView)
+                    .create();
+
+            MaterialButton btnSi = dialogView.findViewById(R.id.btnSiEliminar);
+            MaterialButton btnNo = dialogView.findViewById(R.id.btnNoVolver);
+
+            btnSi.setOnClickListener(v -> {
+                listaServicios.remove(position);
+                adapter.notifyItemRemoved(position);
+                dialog.dismiss();
+            });
+
+            btnNo.setOnClickListener(v -> {
+                dialog.dismiss();
+            });
+
+            dialog.show();
+        });
 
         final String REQUEST_KEY_NUEVO = ServicioNuevoFragment.REQUEST_KEY_NUEVO;
         final String REQUEST_KEY_EDITADO = ServicioNuevoFragment.REQUEST_KEY_EDITADO;

@@ -55,13 +55,13 @@
             >
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnVolver"
+                android:id="@+id/btnNoVolver"
                 style="@style/botonGris"
                 android:text="No, volver atrás"
                 android:padding="0dp"/>
 
             <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnEliminar"
+                    android:id="@+id/btnSiEliminar"
                     style="@style/botonRojo"
                     android:text="Sí, eliminar" />
         </LinearLayout>

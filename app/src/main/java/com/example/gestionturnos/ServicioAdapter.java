@@ -14,22 +14,33 @@ import com.google.android.material.chip.Chip;
 import java.util.List;
 public class ServicioAdapter extends RecyclerView.Adapter<ServicioAdapter.ServicioViewHolder> {
     private List<Servicio> servicios;
-    private static ServicioAdapter.OnEditClickListener onEditClickListener;
+    private static OnEditClickListener onEditClickListener;
+    private static OnDeleteClickListener onDeleteClickListener;
+
+    public ServicioAdapter(List<Servicio> servicios) {
+        this.servicios = servicios;
+    }
 
     public interface OnEditClickListener {
         void onEditClick(Servicio servicio);
     }
-    public ServicioAdapter(List<Servicio> servicios) { this.servicios = servicios; }
+    public interface OnDeleteClickListener {
+        void onDeleteClick(Servicio servicio, int position);
+    }
 
     public void setOnEditClickListener(ServicioAdapter.OnEditClickListener listener) {
-        this.onEditClickListener = listener;
+        onEditClickListener = listener;
+    }
+
+    public void setOnDeleteClickListener(OnDeleteClickListener listener) {
+        onDeleteClickListener = listener;
     }
 
     @NonNull
     @Override
     public ServicioViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_servicio, parent,false);
+                .inflate(R.layout.item_servicio, parent, false);
         return new ServicioViewHolder(view);
     }
 
@@ -42,18 +53,25 @@ public class ServicioAdapter extends RecyclerView.Adapter<ServicioAdapter.Servic
         holder.txtPrecio.setText(servicio.getPrecio());
 
         holder.btnEditar.setOnClickListener(v -> {
-            if (onEditClickListener != null && position != RecyclerView.NO_POSITION) {
-                onEditClickListener.onEditClick(servicios.get(position));
+            if (onEditClickListener != null) {
+                onEditClickListener.onEditClick(servicio);
+            }
+        });
+
+        holder.btnEliminar.setOnClickListener(v -> {
+            if (onDeleteClickListener != null) {
+                onDeleteClickListener.onDeleteClick(servicio, position);
             }
         });
     }
 
     @Override
-    public int getItemCount() { return servicios.size(); }
-
+    public int getItemCount() {
+        return servicios.size();
+    }
     static class ServicioViewHolder extends RecyclerView.ViewHolder {
         TextView txtServicio, txtMinuto, txtPrecio;
-        MaterialButton btnEditar;
+        MaterialButton btnEditar, btnEliminar;
 
         public ServicioViewHolder (@NonNull View itemView){
             super(itemView);
@@ -61,6 +79,7 @@ public class ServicioAdapter extends RecyclerView.Adapter<ServicioAdapter.Servic
             txtMinuto = itemView.findViewById(R.id.detalleServicioMinutos);
             txtPrecio = itemView.findViewById(R.id.detalleServicioPrecio);
             btnEditar = itemView.findViewById(R.id.btnEditar);
+            btnEliminar = itemView.findViewById(R.id.btnEliminar);
         }
     }
 }
