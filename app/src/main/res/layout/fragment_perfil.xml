@@ -102,7 +102,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="2.000 $"
-                        android:textColor="@color/primaryViolet"
+                        android:textColor="@color/black"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
@@ -112,7 +112,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="Rendimiento mensual"
-                        android:textColor="@color/primaryViolet"
+                        android:textColor="@color/black"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -120,7 +120,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_marginBottom="17dp"
-                    android:background="@color/primaryViolet" />
+                    android:background="@color/black"
+                    />
 
                 <LinearLayout
                     android:id="@+id/whybuyCont"
@@ -141,7 +142,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:text="2"
-                            android:textColor="@color/primaryViolet"
+                            android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -152,7 +153,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center"
                             android:text="Turnos\npendientes"
-                            android:textColor="@color/primaryViolet"
+                            android:textColor="@color/black"
                             android:textSize="12sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -162,7 +163,7 @@
                         android:layout_height="55dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginHorizontal="8dp"
-                        android:background="@color/primaryViolet" />
+                        android:background="@color/black" />
 
                     <LinearLayout
                         android:id="@+id/confirmados"
@@ -177,7 +178,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:text="3"
-                            android:textColor="@color/primaryViolet"
+                            android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -188,7 +189,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center"
                             android:text="Turnos\nconfirmados"
-                            android:textColor="@color/primaryViolet"
+                            android:textColor="@color/black"
                             android:textSize="12sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -198,7 +199,7 @@
                         android:layout_height="55dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginHorizontal="8dp"
-                        android:background="@color/primaryViolet" />
+                        android:background="@color/black" />
 
                     <LinearLayout
                         android:id="@+id/cancelados"
@@ -213,7 +214,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:text="2"
-                            android:textColor="@color/primaryViolet"
+                            android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -224,7 +225,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center"
                             android:text="Turnos\ncacelados"
-                            android:textColor="@color/primaryViolet"
+                            android:textColor="@color/black"
                             android:textSize="12sp"
                             android:textStyle="bold" />
                     </LinearLayout>

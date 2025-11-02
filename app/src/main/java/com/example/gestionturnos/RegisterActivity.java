@@ -1,9 +1,15 @@
 package com.example.gestionturnos;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -13,6 +19,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.gestionturnos.data.MyDatabaseHelper;
 import com.example.gestionturnos.data.dao.UserDAO;
+import com.google.android.material.button.MaterialButton;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -116,12 +123,43 @@ public class RegisterActivity extends AppCompatActivity {
                     user.setEmail( correo.getText().toString().trim());
                     user.setPassword(contrasenia.getText().toString().trim());
                     userData.addUser(user);
+                    mostrarDialogRegistro();}}
 
+                    //Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                    //startActivity(intent);
+                    //finish();
+            private void mostrarDialogRegistro() {
+                Dialog dialog = new Dialog(RegisterActivity.this);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.registro_mensaje);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.setCancelable(true);
+
+                // ajustar tamaño de dialogo
+                Window window = dialog.getWindow();
+                if (window != null) {
+                    window.setLayout(
+                            ViewGroup.LayoutParams.MATCH_PARENT,  // ancho
+                            ViewGroup.LayoutParams.WRAP_CONTENT   // alto
+                    );
+                    // agrega márgenes laterales
+                    WindowManager.LayoutParams layoutParams = window.getAttributes();
+                    layoutParams.width = (int) (getResources().getDisplayMetrics().widthPixels * 0.9); // 90% del ancho de pantalla
+                    window.setAttributes(layoutParams);
+                }
+
+                // botones del dialogo
+                MaterialButton btnIrAInicio = dialog.findViewById(R.id.btnIrAInicio);
+
+                btnIrAInicio.setOnClickListener(v -> {
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
-                }
-            }
-        });
+                });
+
+                dialog.show();
+        }
+            });
     }
 };
