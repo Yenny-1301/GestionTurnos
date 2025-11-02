@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:layout_gravity="start"
-            android:text="Nuevo servicio"
+            android:text="Nuevo Servicio"
             android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
             android:textColor="@color/black"
             app:fontFamily="sans-serif-medium" />

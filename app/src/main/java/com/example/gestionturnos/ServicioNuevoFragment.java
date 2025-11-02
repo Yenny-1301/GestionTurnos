@@ -91,7 +91,7 @@ public class ServicioNuevoFragment extends Fragment {
             etDuracionNuevo.setText(servicioOriginal.getMinutos());
             etPrecioNuevo.setText(servicioOriginal.getPrecio());
         } else {
-            etTituloServicio.setText("Nuevo Turno");
+            etTituloServicio.setText("Nuevo Servicio");
         }
     }
 }
