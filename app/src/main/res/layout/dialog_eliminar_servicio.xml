@@ -53,17 +53,18 @@
             android:paddingEnd="16dp"
             android:layout_marginTop="16dp"
             >
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSiEliminar"
+                style="@style/botonRojo"
+                android:text="Sí, eliminar" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnNoVolver"
                 style="@style/botonGris"
-                android:text="No, volver atrás"
+                android:text="Cancelar"
                 android:padding="0dp"/>
 
-            <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSiEliminar"
-                    style="@style/botonRojo"
-                    android:text="Sí, eliminar" />
+
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

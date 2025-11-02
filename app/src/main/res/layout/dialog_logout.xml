@@ -54,14 +54,15 @@
             android:layout_marginTop="16dp"
             >
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCerrarSesion"
+                    style="@style/botonRojo"
+                    android:text="Sí, salir" />
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnVolver"
                     style="@style/botonGris"
                     android:text="Volver"
                     />
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnCerrarSesion"
-                    style="@style/botonRojo"
-                    android:text="Sí, salir" />
+
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
