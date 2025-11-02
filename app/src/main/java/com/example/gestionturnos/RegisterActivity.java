@@ -1,7 +1,6 @@
 package com.example.gestionturnos;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -10,8 +9,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.gestionturnos.data.MyDatabaseHelper;
+import com.example.gestionturnos.data.dao.UserDAO;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -104,9 +105,23 @@ public class RegisterActivity extends AppCompatActivity {
                     camposValidos = false;
                 }
                 if (camposValidos) {
-                    // Continuar a iniciar sesion
+                    UserDAO userData = new UserDAO(RegisterActivity.this);
+
+//                    if (userData.getUserByEmail(correo.getText().toString().trim()) == null) {
+//                        Toast.makeText(RegisterActivity.this, "El correo ya está registrado", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+
+                    Usuario user = new Usuario();
+                    user.setEmail( correo.getText().toString().trim());
+                    user.setPassword(contrasenia.getText().toString().trim());
+                    userData.addUser(user);
+
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
-                }}
-    });}};
+                }
+            }
+        });
+    }
+};
