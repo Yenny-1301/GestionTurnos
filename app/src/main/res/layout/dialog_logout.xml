@@ -36,13 +36,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:gravity="center_horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="¿Quieres salir de tu cuenta?"
-                        android:textColor="@color/greySecondary"
-                        android:textSize="16sp"
-                        android:gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿Quieres salir de tu cuenta?"
+                android:textColor="@color/greySecondary"
+                android:textSize="16sp"
+                android:gravity="center"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,15 +53,15 @@
             android:paddingEnd="16dp"
             android:layout_marginTop="16dp"
             >
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnCerrarSesion"
-                    style="@style/botonRojo"
-                    android:text="Sí, salir" />
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnVolver"
-                    style="@style/botonGris"
-                    android:text="Volver"
-                    />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCerrarSesion"
+                style="@style/botonRojo"
+                android:text="Sí, salir" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnVolver"
+                style="@style/botonGris"
+                android:text="Volver"
+                />
 
         </LinearLayout>
     </LinearLayout>
