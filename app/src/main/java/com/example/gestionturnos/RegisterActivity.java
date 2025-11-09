@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -20,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.gestionturnos.data.MyDatabaseHelper;
 import com.example.gestionturnos.data.dao.UserDAO;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -39,6 +43,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         ImageView iconoPass = findViewById(R.id.iconoPass);
         ImageView iconoPassVerif = findViewById(R.id.iconoPassVerif);
+
+        TextInputLayout emailLayout = findViewById(R.id.emailInputLayout);
+        TextInputLayout passwordLayout = findViewById(R.id.passwordInputLayout);
+        TextInputLayout passwordVerifLayout = findViewById(R.id.passwordInputLayoutPass);
+        TextInputEditText emailEditText = findViewById(R.id.textoInput);
+        TextInputEditText passwordEditText = findViewById(R.id.textoPass);
+        TextInputEditText passwordVerifEditText = findViewById(R.id.textoPassVerif);
 
         // Toggle mostrar contraseña
         iconoPass.setOnClickListener(new View.OnClickListener() {
@@ -88,21 +99,21 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 boolean camposValidos = true;
                 // MANEJO DE ERRORS
-                if (correo.getText().toString().trim().isEmpty()) {
-                    correo.setError("Ingresa tu correo");
+                if (emailEditText.getText().toString().trim().isEmpty()) {
+                    emailLayout.setError("Completar campo");
                     camposValidos = false;
                 }
 
-                if (contrasenia.getText().toString().trim().isEmpty()) {
-                    contrasenia.setError("Ingresa tu contraseña");
+                if (passwordEditText.getText().toString().trim().isEmpty()) {
+                    passwordLayout.setError("Completar campo");
                     camposValidos = false;
                 }
-                if (contraseniaVerif.getText().toString().trim().isEmpty()) {
-                    contraseniaVerif.setError("Ingresa tu contraseña");
-                    camposValidos = false;
+                if (passwordVerifEditText.getText().toString().isEmpty()) {
+                    passwordVerifLayout.setError("Completar campo");
                 }
-                if (!contrasenia.getText().toString().trim().equals(contraseniaVerif.getText().toString().trim())) {
-                    contraseniaVerif.setError("Contraseña no coincide");
+                if (!passwordVerifEditText.getText().toString()
+                        .equals(passwordEditText.getText().toString())) {
+                    passwordVerifLayout.setError("Las contraseñas no coinciden");
                     camposValidos = false;
                 }
                 //el checkbox debe estar chequeado
@@ -161,5 +172,30 @@ public class RegisterActivity extends AppCompatActivity {
                 dialog.show();
         }
             });
+
+        TextWatcher clearErrorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (emailEditText.hasFocus()) {
+                    emailLayout.setError(null);
+                }
+                if (passwordEditText.hasFocus()) {
+                    passwordLayout.setError(null);
+                }
+                if (passwordVerifEditText.hasFocus()) {
+                    passwordVerifLayout.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        };
+
+        emailEditText.addTextChangedListener(clearErrorWatcher);
+        passwordEditText.addTextChangedListener(clearErrorWatcher);
+        passwordVerifEditText.addTextChangedListener(clearErrorWatcher);
     }
 };

@@ -29,41 +29,47 @@
         <!--  Layout INPUT CORREO -->
         <LinearLayout
             android:id="@+id/campoCorreo"
-            android:layout_marginBottom="26dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:background="?attr/inputBackground"
-            android:paddingVertical="8dp"
-            android:paddingHorizontal="15dp"
+            android:layout_marginBottom="26dp"
             android:layout_marginHorizontal="41dp"
-            android:orientation="horizontal">
-            <!--  Layout INPUT CORREO CONTENIDO-->
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="?attr/colorSurface"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="15dp">
+
             <LinearLayout
                 android:id="@+id/inputCorreo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
-                <TextView
-                    android:id="@+id/tituloCorreo"
-                    android:textColor="?attr/colorOnSurfaceVariant"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="correo electrónico"/>
-                <EditText
-                    android:id="@+id/textoInput"
-                    android:inputType="textEmailAddress"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textSize="16sp"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/emailInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:textColorHint="?attr/colorOnSurfaceVariant"
-                    />
+                    app:boxBackgroundColor="?attr/inputBackground"
+                    app:boxBackgroundMode="filled"
+                    app:errorEnabled="true"
+                    app:errorTextAppearance="@style/ErrorTextStyle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textoInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/colorOnSurface"
+                        android:hint="Correo electrónico"
+                        android:inputType="textEmailAddress"
+                        android:minHeight="48dp"
+                        android:padding="8dp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+
             <ImageView
                 android:id="@+id/iconoCorreo"
                 android:layout_width="24dp"
@@ -71,101 +77,117 @@
                 android:contentDescription="Icono de correo electrónico"
                 android:src="@drawable/icon_correo"
                 android:scaleType="fitCenter"
-                app:tint="?attr/iconTint"/>
+                app:tint="?attr/iconTint"
+                android:layout_marginLeft="15dp"
+                />
         </LinearLayout>
+
         <!--  Layout INPUT CONTRASEÑA -->
         <LinearLayout
             android:id="@+id/campoPass"
-            android:layout_marginBottom="26dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:background="?attr/inputBackground"
-            android:paddingVertical="8dp"
-            android:paddingHorizontal="15dp"
+            android:layout_marginBottom="26dp"
             android:layout_marginHorizontal="41dp"
-            android:orientation="horizontal">
-            <!--  Layout INPUT CONTRASEÑA CONTENIDO-->
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="?attr/colorSurface"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="15dp">
+
             <LinearLayout
                 android:id="@+id/inputPass"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
-                <TextView
-                    android:id="@+id/tituloPass"
-                    android:textColor="?attr/colorOnSurfaceVariant"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="contraseña"/>
-                <EditText
-                    android:id="@+id/textoPass"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textSize="16sp"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/passwordInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:textColorHint="?attr/colorOnSurfaceVariant"
-                    />
+                    app:boxBackgroundColor="?attr/inputBackground"
+                    app:boxBackgroundMode="filled"
+                    app:errorEnabled="true"
+                    app:errorTextAppearance="@style/ErrorTextStyle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textoPass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/colorOnSurface"
+                        android:hint="Contraseña"
+                        android:minHeight="48dp"
+                        android:padding="8dp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+
             <ImageView
                 android:id="@+id/iconoPass"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:contentDescription="Icono de correo electrónico"
+                android:layout_marginLeft="15dp"
+                android:contentDescription="Mostrar contraseña"
                 android:src="@drawable/icon_passclose"
                 android:scaleType="fitCenter"
                 app:tint="?attr/iconTint"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/campoPassVerif"
-            android:layout_marginBottom="26dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:background="?attr/inputBackground"
-            android:paddingVertical="8dp"
-            android:paddingHorizontal="15dp"
+            android:layout_marginBottom="26dp"
             android:layout_marginHorizontal="41dp"
-            android:orientation="horizontal">
-            <!--  Layout INPUT CONTRASEÑA CONTENIDO-->
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="?attr/colorSurface"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="15dp">
+
             <LinearLayout
                 android:id="@+id/inputPassVerif"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
-                <TextView
-                    android:id="@+id/tituloPassVerif"
-                    android:textColor="?attr/colorOnSurfaceVariant"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="confirmar contraseña"/>
-                <EditText
-                    android:id="@+id/textoPassVerif"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textSize="16sp"
-                    android:inputType="textPassword"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/passwordInputLayoutPass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:textColorHint="?attr/colorOnSurfaceVariant"
-                    />
+                    app:boxBackgroundColor="?attr/inputBackground"
+                    app:boxBackgroundMode="filled"
+                    app:errorEnabled="true"
+                    app:errorTextAppearance="@style/ErrorTextStyle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textoPassVerif"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/colorOnSurface"
+                        android:hint="Confirmar contraseña"
+                        android:minHeight="48dp"
+                        android:padding="8dp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+
             <ImageView
                 android:id="@+id/iconoPassVerif"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_marginLeft="15dp"
                 android:contentDescription="Mostrar contraseña"
                 android:src="@drawable/icon_passclose"
                 android:scaleType="fitCenter"
-                app:tint="?attr/iconTint"
-                />
+                app:tint="?attr/iconTint"/>
         </LinearLayout>
+
         <!--  COPY terminos y condiciones .... -->
         <LinearLayout
             android:layout_width="match_parent"
