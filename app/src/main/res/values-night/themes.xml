@@ -20,7 +20,7 @@
         <item name="inputBackground">@color/gray_input_dark</item>
         <item name="btnCloseBackground">@color/fondoBtnClose_dark</item>
         <item name="backgroundTint">@color/greyBackground_dark</item>
-        <color name="iconTint">#FFFFFF</color>
+        <item name="iconTint">#FFFFFF</item>
         <item name="bottomNavSelectedColor">@color/primaryViolet</item>
         <item name="bottomNavUnselectedColor">#B0B0B0</item>
     </style>

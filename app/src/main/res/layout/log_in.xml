@@ -70,7 +70,7 @@
                 android:contentDescription="Icono de correo electrónico"
                 android:src="@drawable/icon_correo"
                 android:scaleType="fitCenter"
-                app:tint="@color/iconTint"/>
+                app:tint="?attr/iconTint"/>
         </LinearLayout>
         <!--  Layout INPUT CONTRASEÑA -->
         <LinearLayout
@@ -116,7 +116,7 @@
                 android:contentDescription="Mostrar contraseña"
                 android:src="@drawable/icon_passclose"
                 android:scaleType="fitCenter"
-                app:tint="@color/iconTint"/>
+                app:tint="?attr/iconTint"/>
         </LinearLayout>
         <!--  COPY OLVIDASTE .... -->
         <TextView
