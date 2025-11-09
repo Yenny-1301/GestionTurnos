@@ -1,9 +1,27 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.GestionTurnos" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Colores de superficie y fondo -->
+        <item name="colorSurface">@color/surface</item>
+        <item name="android:colorBackground">@color/white</item>
 
-    <style name="Theme.GestionTurnos" parent="Base.Theme.GestionTurnos" />
+        <!-- Colores de texto -->
+        <item name="colorOnSurface">@color/negro_texto</item>
+        <item name="colorOnSurfaceVariant">@color/gray_input_texto</item>
+
+        <!-- Color primario -->
+        <item name="colorPrimary">@color/primaryViolet</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Colores de controles -->
+        <item name="colorOutline">@color/outlineSec</item>
+
+        <!-- Atributos personalizados -->
+        <item name="inputBackground">@color/gray_input</item>
+        <item name="btnCloseBackground">@color/fondoBtnClose</item>
+        <item name="backgroundTint">@color/greyBackground</item>
+        <color name="iconTint">#49454F</color>
+        <item name="bottomNavSelectedColor">@color/primaryViolet</item>
+        <item name="bottomNavUnselectedColor">@color/greySecondary</item>
+    </style>
 </resources>

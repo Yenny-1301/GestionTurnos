@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="20dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="8dp">
+    app:cardElevation="8dp"
+    app:cardBackgroundColor="?attr/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +20,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="¡Registro exitoso!"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginBottom="15dp" />
@@ -29,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Tu cuenta fue creada correctamente.\nPor seguridad, iniciá sesión para acceder a tu cuenta."
-            android:textColor="@color/greySecondary"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="16sp"
             android:gravity="center"
             android:textAlignment="center"
@@ -40,7 +41,6 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnIrAInicio"
             style="@style/BotonInicio"
-
             android:text="Acceder a mi cuenta" />
 
     </LinearLayout>

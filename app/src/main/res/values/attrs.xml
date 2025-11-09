@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="inputBackground" format="color|reference"/>
+    <attr name="btnCloseBackground" format="color|reference"/>
+    <attr name="backgroundTint" format="color|reference"/>
+    <attr name="bottomNavSelectedColor" format="color"/>
+    <attr name="bottomNavUnselectedColor" format="color"/>
+</resources>

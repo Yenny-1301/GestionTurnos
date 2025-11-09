@@ -1,7 +1,27 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.GestionTurnos" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.Material3.Dark.NoActionBar">
+        <!-- Colores de superficie y fondo -->
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="android:colorBackground">@color/black</item>
+
+        <!-- Colores de texto -->
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorOnSurfaceVariant">@color/gray_input_texto_dark</item>
+
+        <!-- Color primario -->
+        <item name="colorPrimary">@color/primaryViolet</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Colores de controles -->
+        <item name="colorOutline">#49454F</item>
+
+        <!-- Atributos personalizados -->
+        <item name="inputBackground">@color/gray_input_dark</item>
+        <item name="btnCloseBackground">@color/fondoBtnClose_dark</item>
+        <item name="backgroundTint">@color/greyBackground_dark</item>
+        <color name="iconTint">#FFFFFF</color>
+        <item name="bottomNavSelectedColor">@color/primaryViolet</item>
+        <item name="bottomNavUnselectedColor">#B0B0B0</item>
     </style>
 </resources>

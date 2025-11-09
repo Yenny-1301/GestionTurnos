@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?attr/colorSurface"
     android:padding="24dp"
     tools:context=".ServicioNuevoFragment">
 
@@ -22,7 +22,7 @@
             android:layout_gravity="start"
             android:text="Nuevo Servicio"
             android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnSurface"
             app:fontFamily="sans-serif-medium" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -30,9 +30,9 @@
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:hint="Nombre del servicio"
-            app:boxStrokeColor="@color/black"
+            app:boxStrokeColor="?attr/colorOnSurface"
             app:boxStrokeWidth="1dp"
-            app:hintTextColor="@color/black"
+            app:hintTextColor="?attr/colorOnSurfaceVariant"
             app:placeholderText="Ej: Corte de cabello"
             app:endIconMode="clear_text"
             app:placeholderTextAppearance="@style/PlaceholderBlack"
@@ -42,8 +42,9 @@
                 android:id="@+id/etNombreServicioNuevo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/gray_input"
+                android:background="?attr/inputBackground"
                 android:inputType="textPersonName"
+                android:textColor="?attr/colorOnSurface"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,8 +62,9 @@
                 android:id="@+id/etDuracionNuevo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/gray_input"
-                android:inputType="textPersonName" />
+                android:background="?attr/inputBackground"
+                android:inputType="textPersonName"
+                android:textColor="?attr/colorOnSurface" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Precio -->
@@ -79,8 +81,9 @@
                 android:id="@+id/etPrecioNuevo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/gray_input"
-                android:inputType="number" />
+                android:background="?attr/inputBackground"
+                android:inputType="number"
+                android:textColor="?attr/colorOnSurface" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Botones -->
@@ -98,7 +101,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="Cancelar"
-                app:backgroundTint="@color/gray_input_texto"
+                app:backgroundTint="?attr/colorOnSurfaceVariant"
                 app:cornerRadius="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

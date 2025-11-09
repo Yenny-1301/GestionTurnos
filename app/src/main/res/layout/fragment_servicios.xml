@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_input"
+    android:background="?attr/inputBackground"
     tools:context=".ServiciosFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="?attr/colorSurface"
         tools:context=".ServiciosFragment">
 
         <LinearLayout
@@ -30,7 +30,7 @@
                 android:text="Servicios"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                android:textColor="@color/black" />
+                android:textColor="?attr/colorOnSurface" />
         </LinearLayout>
 
         <LinearLayout
@@ -39,7 +39,7 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             android:padding="16dp"
-            android:background="@color/gray_input"
+            android:background="?attr/inputBackground"
             app:layout_constraintTop_toBottomOf="@id/layoutHeader"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

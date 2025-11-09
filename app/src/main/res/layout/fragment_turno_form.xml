@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?attr/colorSurface"
     android:padding="24dp"
     tools:context=".TurnoFormFragment">
 
@@ -22,7 +22,7 @@
             android:layout_gravity="start"
             android:text="Nuevo turno"
             android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnSurface"
             app:fontFamily="sans-serif-medium" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -30,9 +30,9 @@
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:hint="Nombre"
-            app:boxStrokeColor="@color/black"
+            app:boxStrokeColor="?attr/colorOnSurface"
             app:boxStrokeWidth="1dp"
-            app:hintTextColor="@color/black"
+            app:hintTextColor="?attr/colorOnSurfaceVariant"
             app:placeholderText="Ej: Juan"
             app:endIconMode="clear_text"
             app:placeholderTextAppearance="@style/PlaceholderBlack"
@@ -42,8 +42,9 @@
                 android:id="@+id/etNombre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/gray_input"
+                android:background="?attr/inputBackground"
                 android:inputType="textPersonName"
+                android:textColor="?attr/colorOnSurface"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,8 +62,9 @@
                 android:id="@+id/etApellido"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/gray_input"
-                android:inputType="textPersonName" />
+                android:background="?attr/inputBackground"
+                android:inputType="textPersonName"
+                android:textColor="?attr/colorOnSurface" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Teléfono -->
@@ -79,8 +81,9 @@
                 android:id="@+id/etTelefono"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/gray_input"
-                android:inputType="phone" />
+                android:background="?attr/inputBackground"
+                android:inputType="phone"
+                android:textColor="?attr/colorOnSurface" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Selector de servicio -->
@@ -96,9 +99,10 @@
                 android:id="@+id/actvServicio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/gray_input"
+                android:background="?attr/inputBackground"
                 android:inputType="none"
-                android:padding="12dp" />
+                android:padding="12dp"
+                android:textColor="?attr/colorOnSurface" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Fecha y Hora -->
@@ -122,8 +126,9 @@
                     android:id="@+id/etFecha"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/gray_input"
-                    android:inputType="date" />
+                    android:background="?attr/inputBackground"
+                    android:inputType="date"
+                    android:textColor="?attr/colorOnSurface" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Space
@@ -141,8 +146,9 @@
                     android:id="@+id/etHora"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/gray_input"
-                    android:inputType="time" />
+                    android:background="?attr/inputBackground"
+                    android:inputType="time"
+                    android:textColor="?attr/colorOnSurface" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -158,9 +164,10 @@
                 android:id="@+id/etNotas"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:background="@color/gray_input"
+                android:background="?attr/inputBackground"
                 android:gravity="top"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"
+                android:textColor="?attr/colorOnSurface" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Botones -->
@@ -178,7 +185,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="Cancelar"
-                app:backgroundTint="@color/gray_input_texto"
+                app:backgroundTint="?attr/colorOnSurfaceVariant"
                 app:cornerRadius="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

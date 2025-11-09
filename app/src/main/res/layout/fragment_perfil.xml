@@ -7,7 +7,7 @@
     tools:context=".PerfilFragment">
 
     <LinearLayout
-        android:background="#FFFFFF"
+        android:background="?attr/colorSurface"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,7 +29,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="Mi Perfil"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="40sp"
                 android:textStyle="bold" />
 
@@ -37,8 +37,10 @@
                 android:id="@+id/cerrarSesion"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
+                android:layout_marginHorizontal="10dp"
                 android:src="@drawable/logout_04"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -46,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/greyBackground"
+            android:background="?attr/backgroundTint"
             android:orientation="vertical"
             android:paddingTop="28dp"
             android:paddingBottom="26dp"
@@ -69,7 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Yennyfer"
-                    android:textColor="#000000"
+                    android:textColor="#FF000000"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
@@ -102,7 +104,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="2.000 $"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
@@ -112,7 +114,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="Rendimiento mensual"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -120,7 +122,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_marginBottom="17dp"
-                    android:background="@color/black"
+                    android:background="?attr/colorOutline"
                     />
 
                 <LinearLayout
@@ -142,7 +144,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:text="2"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -153,7 +155,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center"
                             android:text="Turnos\npendientes"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="12sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -163,7 +165,7 @@
                         android:layout_height="55dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginHorizontal="8dp"
-                        android:background="@color/black" />
+                        android:background="?attr/colorOutline" />
 
                     <LinearLayout
                         android:id="@+id/confirmados"
@@ -178,7 +180,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:text="3"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -189,7 +191,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center"
                             android:text="Turnos\nconfirmados"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="12sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -199,7 +201,7 @@
                         android:layout_height="55dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginHorizontal="8dp"
-                        android:background="@color/black" />
+                        android:background="?attr/colorOutline" />
 
                     <LinearLayout
                         android:id="@+id/cancelados"
@@ -214,7 +216,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:text="2"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -225,7 +227,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center"
                             android:text="Turnos\ncacelados"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="12sp"
                             android:textStyle="bold" />
                     </LinearLayout>

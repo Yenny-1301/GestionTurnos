@@ -3,7 +3,7 @@
     android:shape="rectangle">
 
     <!-- Color de fondo del contenedor -->
-    <solid android:color="@android:color/white"/>
+    <solid android:color="?attr/colorSurface"/>
 
     <!-- Bordes redondeados solo arriba -->
     <corners

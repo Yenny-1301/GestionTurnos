@@ -6,7 +6,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="@color/white">
+        android:background="?attr/colorSurface">
         <!--  Layout TITULO -->
         <LinearLayout
             android:id="@+id/containerTitulo"
@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Regístrate"
-                android:textColor="#000000"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="40sp"/>
         </LinearLayout>
         <!--  Layout INPUT CORREO -->
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:background="@color/gray_input"
+            android:background="?attr/inputBackground"
             android:paddingVertical="8dp"
             android:paddingHorizontal="15dp"
             android:layout_marginHorizontal="41dp"
@@ -47,7 +47,7 @@
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/tituloCorreo"
-                    android:textColor="@color/gray_input_texto"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:layout_marginBottom="1dp"
                     android:layout_height="wrap_content"
@@ -56,10 +56,12 @@
                 <EditText
                     android:id="@+id/textoInput"
                     android:inputType="textEmailAddress"
-                    android:textColor="@color/negro_texto"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:textColorHint="?attr/colorOnSurfaceVariant"
                     />
             </LinearLayout>
         </LinearLayout>
@@ -70,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:background="@color/gray_input"
+            android:background="?attr/inputBackground"
             android:paddingVertical="8dp"
             android:paddingHorizontal="15dp"
             android:layout_marginHorizontal="41dp"
@@ -84,7 +86,7 @@
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/tituloPass"
-                    android:textColor="@color/gray_input_texto"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:layout_marginBottom="1dp"
                     android:layout_height="wrap_content"
@@ -92,20 +94,22 @@
                     android:text="contraseña"/>
                 <EditText
                     android:id="@+id/textoPass"
-                    android:textColor="@color/negro_texto"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp"
-                    android:inputType="textPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:textColorHint="?attr/colorOnSurfaceVariant"
                     />
             </LinearLayout>
             <ImageView
                 android:id="@+id/iconoPass"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:contentDescription="Mostrar contraseña"
-                android:src="@drawable/icon_passclose"
-                android:scaleType="fitCenter"/>
+                android:contentDescription="Icono de correo electrónico"
+                android:src="@drawable/icon_correo"
+                android:scaleType="fitCenter"
+                app:tint="@color/iconTint"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/campoPassVerif"
@@ -113,7 +117,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:background="@color/gray_input"
+            android:background="?attr/inputBackground"
             android:paddingVertical="8dp"
             android:paddingHorizontal="15dp"
             android:layout_marginHorizontal="41dp"
@@ -127,7 +131,7 @@
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/tituloPassVerif"
-                    android:textColor="@color/gray_input_texto"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:layout_marginBottom="1dp"
                     android:layout_height="wrap_content"
@@ -135,11 +139,13 @@
                     android:text="confirmar contraseña"/>
                 <EditText
                     android:id="@+id/textoPassVerif"
-                    android:textColor="@color/negro_texto"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp"
                     android:inputType="textPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:textColorHint="?attr/colorOnSurfaceVariant"
                     />
             </LinearLayout>
             <ImageView
@@ -149,6 +155,7 @@
                 android:contentDescription="Mostrar contraseña"
                 android:src="@drawable/icon_passclose"
                 android:scaleType="fitCenter"
+                app:tint="@color/iconTint"
                 />
         </LinearLayout>
         <!--  COPY terminos y condiciones .... -->
