@@ -11,8 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.gestionturnos.data.MyDatabaseHelper;
-import com.example.gestionturnos.data.dao.UserDAO;
+
+import com.example.gestionturnos.data.repository.UsuarioRepository;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -105,17 +105,13 @@ public class RegisterActivity extends AppCompatActivity {
                     camposValidos = false;
                 }
                 if (camposValidos) {
-                    UserDAO userData = new UserDAO(RegisterActivity.this);
-
-//                    if (userData.getUserByEmail(correo.getText().toString().trim()) == null) {
-//                        Toast.makeText(RegisterActivity.this, "El correo ya está registrado", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
 
                     Usuario user = new Usuario();
                     user.setEmail( correo.getText().toString().trim());
                     user.setPassword(contrasenia.getText().toString().trim());
-                    userData.addUser(user);
+
+                    UsuarioRepository repo = new UsuarioRepository();
+                    repo.insertarUsuario(RegisterActivity.this, user);
 
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
