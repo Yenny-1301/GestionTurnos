@@ -31,6 +31,16 @@
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvFechas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:overScrollMode="never"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
         </LinearLayout>
 
         <LinearLayout
