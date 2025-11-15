@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -60,11 +61,41 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
                 Toast.makeText(requireContext(), "Seleccionaste: " + fecha.toString(), Toast.LENGTH_SHORT).show());
         rvFechas.setAdapter(fechaAdapter);
 
+        // ⭐ AGREGAR SNAPHELPER para centrar items automáticamente
+        LinearSnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(rvFechas);
+
         // Selecciona y centra el día actual
         fechaAdapter.seleccionarPorFecha(LocalDate.now());
-        int posicionHoy = buscarPosicionHoy(fechas);
-        rvFechas.post(() ->
-                layoutManager.scrollToPositionWithOffset(posicionHoy, rvFechas.getWidth() / 2));
+
+        // ⭐ SOLUCIÓN: Esperar a que el layout esté completamente medido
+        rvFechas.getViewTreeObserver().addOnGlobalLayoutListener(
+                new android.view.ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        // Remover el listener para que solo se ejecute una vez
+                        rvFechas.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                        int selectedPos = fechaAdapter.getSelectedPosition();
+                        if (selectedPos != RecyclerView.NO_POSITION) {
+                            // Hacer scroll primero a la posición aproximada
+                            layoutManager.scrollToPosition(selectedPos);
+
+                            // Luego ajustar el centrado exacto
+                            rvFechas.post(() -> {
+                                View selectedView = layoutManager.findViewByPosition(selectedPos);
+                                if (selectedView != null) {
+                                    int itemWidth = selectedView.getWidth();
+                                    int recyclerWidth = rvFechas.getWidth();
+                                    int offset = (recyclerWidth / 2) - (itemWidth / 2);
+
+                                    layoutManager.scrollToPositionWithOffset(selectedPos, offset);
+                                }
+                            });
+                        }
+                    }
+                }
+        );
 
         // --- Lista de turnos ---
         recyclerView = view.findViewById(R.id.rvTurnos);
@@ -142,4 +173,3 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
         return -1;
     }
 }
-

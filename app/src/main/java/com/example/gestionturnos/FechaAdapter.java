@@ -50,33 +50,45 @@ public class FechaAdapter extends RecyclerView.Adapter<FechaAdapter.FechaViewHol
         holder.tvDayName.setText(diaSemana);
         holder.tvDayNumber.setText(diaNumero);
 
-        boolean isSelected = position == selectedPosition;
-        // --- Colores desde el tema ---
-        TypedValue typedValue = new TypedValue();
         Context context = holder.itemView.getContext();
+        TypedValue typedValue = new TypedValue();
+        boolean isSelected = position == selectedPosition;
 
-// Fondo: usa colorPrimary si está seleccionado, colorOutline si no
-        int colorAttr = isSelected
-                ? com.google.android.material.R.attr.colorOnPrimary
-                : com.google.android.material.R.attr.colorOutline;
+        // Color de fondo
+        int colorFondo;
+        if (isSelected) {
+            // Siempre usar primaryViolet cuando está seleccionado (independiente del tema)
+            colorFondo = ContextCompat.getColor(context, R.color.primaryViolet);
+        } else {
+            colorFondo = ContextCompat.getColor(context, R.color.outlineSec);
+        }
 
-        context.getTheme().resolveAttribute(colorAttr, typedValue, true);
-        int colorFondo = typedValue.data;
+        // Color de texto
+        int colorTexto;
+        if (isSelected) {
+            // Texto blanco cuando está seleccionado
+            context.getTheme().resolveAttribute(
+                    com.google.android.material.R.attr.colorOnPrimary,
+                    typedValue,
+                    true
+            );
+            colorTexto = typedValue.data;
+        } else {
+            // Texto oscuro cuando NO está seleccionado
+            context.getTheme().resolveAttribute(
+                    com.google.android.material.R.attr.colorOnSurface,
+                    typedValue,
+                    true
+            );
+            colorTexto = typedValue.data;
+        }
 
-// Texto: usa colorOnPrimary (blanco en tu tema)
-        context.getTheme().resolveAttribute(
-                com.google.android.material.R.attr.colorOnPrimary,
-                typedValue,
-                true
-        );
-        int colorTexto = typedValue.data;
-
-// Aplicar colores
+        // Aplicar colores
         holder.cardView.setCardBackgroundColor(colorFondo);
         holder.tvDayName.setTextColor(colorTexto);
         holder.tvDayNumber.setTextColor(colorTexto);
 
-// Efecto de escala (más grande si está seleccionado)
+        // Efecto de escala (más grande si está seleccionado)
         holder.cardView.setScaleX(isSelected ? 1.1f : 1f);
         holder.cardView.setScaleY(isSelected ? 1.1f : 1f);
 
@@ -116,5 +128,9 @@ public class FechaAdapter extends RecyclerView.Adapter<FechaAdapter.FechaViewHol
                 break;
             }
         }
+    }
+
+    public int getSelectedPosition() {
+        return selectedPosition;
     }
 }
