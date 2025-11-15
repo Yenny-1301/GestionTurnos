@@ -18,5 +18,5 @@ public class UsuarioEntity {
     public String contrasena;
 
     @ColumnInfo(name = "fecha_creacion")
-    public Date fechaCreacion;
+    public String fechaCreacion;
 }

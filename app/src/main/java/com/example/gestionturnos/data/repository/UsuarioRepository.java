@@ -12,10 +12,13 @@ import java.util.Locale;
 
 public class UsuarioRepository {
     public void insertarUsuario(Context context, Usuario usuario) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String fechaLegible = sdf.format(new Date());
+
         UsuarioEntity entity = new UsuarioEntity();
         entity.correoElectronico = usuario.getEmail();
         entity.contrasena = usuario.getPassword();
-        entity.fechaCreacion = new Date();
+        entity.fechaCreacion = fechaLegible;
 
         DatabaseClient.getInstance(context)
                 .getAppDatabase()

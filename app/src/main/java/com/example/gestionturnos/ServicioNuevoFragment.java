@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
+import com.example.gestionturnos.data.repository.ServicioRepository;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
@@ -70,6 +71,8 @@ public class ServicioNuevoFragment extends Fragment {
         servicioParaEnviar.setMinutos(etDuracionNuevo.getText().toString());
         servicioParaEnviar.setPrecio(etPrecioNuevo.getText().toString());
 
+        ServicioRepository repo = new ServicioRepository(requireContext());
+        repo.insertarServicio(1, servicioParaEnviar);
 
         Bundle result = new Bundle();
         result.putSerializable("servicio", servicioParaEnviar);
@@ -91,7 +94,7 @@ public class ServicioNuevoFragment extends Fragment {
             etDuracionNuevo.setText(servicioOriginal.getMinutos());
             etPrecioNuevo.setText(servicioOriginal.getPrecio());
         } else {
-            etTituloServicio.setText("Nuevo Turno");
+            etTituloServicio.setText("Nuevo Servicio");
         }
     }
 }

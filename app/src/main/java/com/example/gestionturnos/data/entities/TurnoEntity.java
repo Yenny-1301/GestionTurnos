@@ -55,12 +55,12 @@ public class TurnoEntity {
     public Integer estadoId;
 
     @ColumnInfo(name = "fecha_turno")
-    public Date fechaTurno;
+    public String fechaTurno;
 
     @ColumnInfo(name = "fecha_creacion")
-    public Date fechaCreacion;
+    public String fechaCreacion;
 
     @ColumnInfo(name = "fecha_actualizacion")
-    public Date fechaActualizacion;
+    public String fechaActualizacion;
 }
 

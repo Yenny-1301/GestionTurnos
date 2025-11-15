@@ -2,6 +2,7 @@ package com.example.gestionturnos.data.repository;
 
 import android.content.Context;
 
+import com.example.gestionturnos.AppDatabase;
 import com.example.gestionturnos.DatabaseClient;
 import com.example.gestionturnos.Servicio;
 import com.example.gestionturnos.data.entities.ServicioEntity;
@@ -10,78 +11,75 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServicioRepository {
-    public void insertarServicio(Context context, int usuarioId, Servicio servicio) {
+
+    private final AppDatabase db;
+
+    public ServicioRepository(Context context) {
+        this.db = DatabaseClient.getInstance(context).getAppDatabase();
+    }
+
+    public void insertarServicio(int usuarioId, Servicio servicio) {
         ServicioEntity entity = new ServicioEntity();
         entity.usuarioId = usuarioId;
         entity.nombre = servicio.getNombreServicio();
 
         try {
             entity.duracion = Integer.parseInt(servicio.getMinutos());
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             entity.duracion = 0;
         }
 
         try {
             entity.precio = Double.parseDouble(servicio.getPrecio());
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             entity.precio = 0.0;
         }
 
-        DatabaseClient.getInstance(context)
-                .getAppDatabase()
-                .servicioDao()
-                .insert(entity);
+        db.servicioDao().insert(entity);
     }
-    public List<Servicio> obtenerTodos(Context context) {
-        List<ServicioEntity> entities = DatabaseClient.getInstance(context)
-                .getAppDatabase()
-                .servicioDao()
-                .getAll();
 
+    public List<Servicio> obtenerTodos() {
+        List<ServicioEntity> entities = db.servicioDao().getAll();
         return mapToModelList(entities);
     }
-    public List<Servicio> obtenerPorUsuario(Context context, int usuarioId) {
-        List<ServicioEntity> entities = DatabaseClient.getInstance(context)
-                .getAppDatabase()
-                .servicioDao()
-                .getServiciosByUsuario(usuarioId);
 
+    public List<Servicio> obtenerPorUsuario(int usuarioId) {
+        List<ServicioEntity> entities = db.servicioDao().getServiciosByUsuario(usuarioId);
         return mapToModelList(entities);
     }
-    public void actualizarServicio(Context context, int servicioId, Servicio servicio) {
-        ServicioEntity entity = DatabaseClient.getInstance(context)
-                .getAppDatabase()
-                .servicioDao()
-                .findById(servicioId);
+
+    public void actualizarServicio(int servicioId, Servicio servicio) {
+        ServicioEntity entity = db.servicioDao().findById(servicioId);
 
         if (entity != null) {
             entity.nombre = servicio.getNombreServicio();
-            entity.duracion = Integer.parseInt(servicio.getMinutos());
-            entity.precio = Double.parseDouble(servicio.getPrecio());
 
-            DatabaseClient.getInstance(context)
-                    .getAppDatabase()
-                    .servicioDao()
-                    .update(entity);
+            try {
+                entity.duracion = Integer.parseInt(servicio.getMinutos());
+            } catch (Exception e) {
+                entity.duracion = 0;
+            }
+
+            try {
+                entity.precio = Double.parseDouble(servicio.getPrecio());
+            } catch (Exception e) {
+                entity.precio = 0.0;
+            }
+
+            db.servicioDao().update(entity);
         }
     }
 
-    public void eliminarServicio(Context context, int servicioId) {
-        ServicioEntity entity = DatabaseClient.getInstance(context)
-                .getAppDatabase()
-                .servicioDao()
-                .findById(servicioId);
+    public void eliminarServicio(int servicioId) {
+        ServicioEntity entity = db.servicioDao().findById(servicioId);
 
         if (entity != null) {
-            DatabaseClient.getInstance(context)
-                    .getAppDatabase()
-                    .servicioDao()
-                    .delete(entity);
+            db.servicioDao().delete(entity);
         }
     }
-
     private List<Servicio> mapToModelList(List<ServicioEntity> entities) {
         List<Servicio> servicios = new ArrayList<>();
+
         for (ServicioEntity entity : entities) {
             Servicio s = new Servicio();
             s.setNombreServicio(entity.nombre);
@@ -89,6 +87,7 @@ public class ServicioRepository {
             s.setPrecio(String.valueOf(entity.precio));
             servicios.add(s);
         }
+
         return servicios;
     }
 }

@@ -6,9 +6,14 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "estados")
 public class EstadoEntity {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     public int id;
 
     public String nombre;
+
+    public EstadoEntity(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
 }
 

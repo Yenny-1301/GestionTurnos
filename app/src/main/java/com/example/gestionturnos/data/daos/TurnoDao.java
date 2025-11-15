@@ -33,4 +33,6 @@ public interface TurnoDao {
 
     @Query("SELECT * FROM turnos WHERE id = :id LIMIT 1")
     TurnoEntity findById(int id);
+    @Query("SELECT * FROM turnos WHERE fecha_turno = :fecha")
+    List<TurnoEntity> getTurnosByFecha(String fecha);
 }
