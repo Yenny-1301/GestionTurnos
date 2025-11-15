@@ -1,0 +1,86 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp">
+
+    <!-- Card: Pendiente -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardPendiente"
+        android:layout_width="125dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp">
+
+        <TextView
+            android:id="@+id/tvEstadoPendiente"
+            android:layout_width="125dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Pendiente"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Card: Confirmado -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardConfirmado"
+        android:layout_width="125dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp">
+
+        <TextView
+            android:id="@+id/tvEstadoConfirmado"
+            android:layout_width="125dp"
+            android:layout_height="40dp"
+            android:paddingStart="5dp"
+            android:gravity="center"
+            android:paddingEnd="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Confirmado"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Card: Cancelado -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardCancelado"
+        android:layout_width="125dp"
+        android:layout_height="40dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp">
+
+        <TextView
+            android:id="@+id/tvEstadoCancelado"
+            android:layout_width="125dp"
+            android:layout_height="40dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:gravity="center"
+            android:text="Cancelado"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

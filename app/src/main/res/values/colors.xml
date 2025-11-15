@@ -12,6 +12,8 @@
     <color name="lila">#C084FC</color>
     <color name="purpura">#A855F7</color>
     <color name="rojo">#EF4444</color>
+    <color name="secundaryViolet">#EADDFF</color>
+
 
     <!-- Colores modo claro -->
     <color name="gray_input">#F2F2F7</color>

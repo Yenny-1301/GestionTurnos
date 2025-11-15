@@ -157,6 +157,9 @@ public class RegisterActivity extends AppCompatActivity {
                     // agrega márgenes laterales
                     WindowManager.LayoutParams layoutParams = window.getAttributes();
                     layoutParams.width = (int) (getResources().getDisplayMetrics().widthPixels * 0.9); // 90% del ancho de pantalla
+                    // ⭐ AGREGAR EFECTO DE DESENFOQUE/OSCURECIMIENTO
+                    layoutParams.dimAmount = 0.7f; // 0.0 (sin oscurecer) a 1.0 (completamente oscuro)
+                    layoutParams.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                     window.setAttributes(layoutParams);
                 }
 

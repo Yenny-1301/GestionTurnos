@@ -60,27 +60,16 @@ public class FechaAdapter extends RecyclerView.Adapter<FechaAdapter.FechaViewHol
             // Siempre usar primaryViolet cuando está seleccionado (independiente del tema)
             colorFondo = ContextCompat.getColor(context, R.color.primaryViolet);
         } else {
-            colorFondo = ContextCompat.getColor(context, R.color.outlineSec);
+            colorFondo = ContextCompat.getColor(context, R.color.secundaryViolet);
         }
 
         // Color de texto
         int colorTexto;
         if (isSelected) {
-            // Texto blanco cuando está seleccionado
-            context.getTheme().resolveAttribute(
-                    com.google.android.material.R.attr.colorOnPrimary,
-                    typedValue,
-                    true
-            );
-            colorTexto = typedValue.data;
+            colorTexto = ContextCompat.getColor(context, R.color.white);
+
         } else {
-            // Texto oscuro cuando NO está seleccionado
-            context.getTheme().resolveAttribute(
-                    com.google.android.material.R.attr.colorOnSurface,
-                    typedValue,
-                    true
-            );
-            colorTexto = typedValue.data;
+            colorTexto = ContextCompat.getColor(context, R.color.greySecondary);
         }
 
         // Aplicar colores

@@ -7,7 +7,9 @@
 
         <!-- Colores de texto -->
         <item name="colorOnSurface">@color/white</item>
-        <item name="colorOnSurfaceVariant">@color/gray_input_texto_dark</item>
+        <!--<item name="colorOnSurfaceVariant">@color/gray_input_texto_dark</item>-->
+        <item name="colorOnSurfaceVariant">@color/greySecondary</item>
+
 
         <!-- Color primario -->
         <item name="colorPrimary">@color/primaryViolet</item>

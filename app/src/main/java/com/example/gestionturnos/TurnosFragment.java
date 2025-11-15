@@ -2,17 +2,20 @@ package com.example.gestionturnos;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
@@ -28,10 +31,18 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
     private RecyclerView recyclerView;
     private TurnoAdapter adapter;
     private List<Turno> listaTurnos;
+    private List<Turno> turnosFiltrados;
+    private String estadoSeleccionado = "Pendiente"; // Estado inicial
+    private View rootView;
+
+    // Referencias a los cards y textos
+    private MaterialCardView cardPendiente, cardConfirmado, cardCancelado;
+    private TextView tvPendiente, tvConfirmado, tvCancelado;
 
     public TurnosFragment() {
         if (listaTurnos == null) {
             listaTurnos = new ArrayList<>();
+            turnosFiltrados = new ArrayList<>();
         }
     }
 
@@ -47,41 +58,35 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_turnos, container, false);
+        rootView = inflater.inflate(R.layout.fragment_turnos, container, false);
+        View estadosView = LayoutInflater.from(requireContext()).inflate(R.layout.item_estado, container, false);
 
-        // --- Filtro de fechas (debajo del título) ---
-        RecyclerView rvFechas = view.findViewById(R.id.rvFechas);
+        // --- Filtro de fechas ---
+        RecyclerView rvFechas = rootView.findViewById(R.id.rvFechas);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         rvFechas.setLayoutManager(layoutManager);
 
-        // Genera 10 días antes y 10 después del día actual
         List<LocalDate> fechas = generarFechas(10, 10);
 
         FechaAdapter fechaAdapter = new FechaAdapter(fechas, (pos, fecha) ->
                 Toast.makeText(requireContext(), "Seleccionaste: " + fecha.toString(), Toast.LENGTH_SHORT).show());
         rvFechas.setAdapter(fechaAdapter);
 
-        // ⭐ AGREGAR SNAPHELPER para centrar items automáticamente
         LinearSnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(rvFechas);
 
-        // Selecciona y centra el día actual
         fechaAdapter.seleccionarPorFecha(LocalDate.now());
 
-        // ⭐ SOLUCIÓN: Esperar a que el layout esté completamente medido
         rvFechas.getViewTreeObserver().addOnGlobalLayoutListener(
                 new android.view.ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        // Remover el listener para que solo se ejecute una vez
                         rvFechas.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                         int selectedPos = fechaAdapter.getSelectedPosition();
                         if (selectedPos != RecyclerView.NO_POSITION) {
-                            // Hacer scroll primero a la posición aproximada
                             layoutManager.scrollToPosition(selectedPos);
 
-                            // Luego ajustar el centrado exacto
                             rvFechas.post(() -> {
                                 View selectedView = layoutManager.findViewByPosition(selectedPos);
                                 if (selectedView != null) {
@@ -97,17 +102,23 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
                 }
         );
 
+        // --- Botones de estado ---
+        inicializarFiltrosEstado();
+
         // --- Lista de turnos ---
-        recyclerView = view.findViewById(R.id.rvTurnos);
+        recyclerView = rootView.findViewById(R.id.rvTurnos);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new TurnoAdapter(listaTurnos);
+        adapter = new TurnoAdapter(turnosFiltrados);
         recyclerView.setAdapter(adapter);
         adapter.setOnEditClickListener(this);
         adapter.setOnStatusChangeListener(this);
 
+        // Aplicar filtro inicial
+        filtrarPorEstado(estadoSeleccionado);
+
         // --- Botón flotante ---
-        FloatingActionButton fab = view.findViewById(R.id.fabAddTurno);
+        FloatingActionButton fab = rootView.findViewById(R.id.fabAddTurno);
         fab.setOnClickListener(v -> ((NavigationHost) requireActivity()).navigateTo(
                 new TurnoFormFragment(), true));
 
@@ -120,7 +131,7 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
                     Turno nuevoTurno = (Turno) result.getSerializable("turno");
                     if (nuevoTurno != null) {
                         listaTurnos.add(nuevoTurno);
-                        adapter.notifyItemInserted(listaTurnos.size() - 1);
+                        filtrarPorEstado(estadoSeleccionado);
                     }
                 });
 
@@ -131,11 +142,81 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
                     int position = listaTurnos.indexOf(turnoEditado);
                     if (position != -1) {
                         listaTurnos.set(position, turnoEditado);
-                        adapter.notifyItemChanged(position);
+                        filtrarPorEstado(estadoSeleccionado);
                     }
                 });
 
-        return view;
+        return rootView;
+    }
+
+    private void inicializarFiltrosEstado() {
+        cardPendiente = rootView.findViewById(R.id.cardPendiente);
+        cardConfirmado = rootView.findViewById(R.id.cardConfirmado);
+        cardCancelado = rootView.findViewById(R.id.cardCancelado);
+
+        tvPendiente = rootView.findViewById(R.id.tvEstadoPendiente);
+        tvConfirmado = rootView.findViewById(R.id.tvEstadoConfirmado);
+        tvCancelado = rootView.findViewById(R.id.tvEstadoCancelado);
+
+        View.OnClickListener estadoClickListener = v -> {
+            if (v == cardPendiente) {
+                estadoSeleccionado = "Pendiente";
+            } else if (v == cardConfirmado) {
+                estadoSeleccionado = "Confirmado";
+            } else if (v == cardCancelado) {
+                estadoSeleccionado = "Cancelado";
+            }
+
+            actualizarColores();
+            filtrarPorEstado(estadoSeleccionado);
+        };
+
+        cardPendiente.setOnClickListener(estadoClickListener);
+        cardConfirmado.setOnClickListener(estadoClickListener);
+        cardCancelado.setOnClickListener(estadoClickListener);
+
+        // Actualizar colores iniciales
+        actualizarColores();
+    }
+
+    private void actualizarColores() {
+        Context context = getContext();
+        if (context == null) return;
+
+        int colorInactivo = ContextCompat.getColor(context, R.color.greySecondary);
+        int colorTextoActivo = ContextCompat.getColor(context, android.R.color.white);
+        int colorTextoInactivo = ContextCompat.getColor(context, R.color.gray_input_texto);
+
+        int colorPendiente = ContextCompat.getColor(context, R.color.azul);
+        int colorConfirmado = ContextCompat.getColor(context, R.color.green);
+        int colorCancelado = ContextCompat.getColor(context, R.color.red);
+
+        // Pendiente
+        boolean isPendienteSeleccionado = estadoSeleccionado.equals("Pendiente");
+        cardPendiente.setCardBackgroundColor(isPendienteSeleccionado ? colorPendiente : colorInactivo);
+        tvPendiente.setTextColor(isPendienteSeleccionado ? colorTextoActivo : colorTextoInactivo);
+
+        // Confirmado
+        boolean isConfirmadoSeleccionado = estadoSeleccionado.equals("Confirmado");
+        cardConfirmado.setCardBackgroundColor(isConfirmadoSeleccionado ? colorConfirmado : colorInactivo);
+        tvConfirmado.setTextColor(isConfirmadoSeleccionado ? colorTextoActivo : colorTextoInactivo);
+
+        // Cancelado
+        boolean isCanceladoSeleccionado = estadoSeleccionado.equals("Cancelado");
+        cardCancelado.setCardBackgroundColor(isCanceladoSeleccionado ? colorCancelado : colorInactivo);
+        tvCancelado.setTextColor(isCanceladoSeleccionado ? colorTextoActivo : colorTextoInactivo);
+    }
+
+    private void filtrarPorEstado(String estado) {
+        turnosFiltrados.clear();
+
+        for (Turno turno : listaTurnos) {
+            if (turno.getEstado().equals(estado)) {
+                turnosFiltrados.add(turno);
+            }
+        }
+
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -153,7 +234,7 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
         if (position != -1) {
             Turno turnoActualizar = listaTurnos.get(position);
             turnoActualizar.setEstado(nuevoEstado);
-            adapter.notifyItemChanged(position);
+            filtrarPorEstado(estadoSeleccionado);
         }
     }
 
@@ -164,12 +245,5 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
             lista.add(hoy.plusDays(i));
         }
         return lista;
-    }
-
-    private int buscarPosicionHoy(List<LocalDate> lista) {
-        LocalDate hoy = LocalDate.now();
-        for (int i = 0; i < lista.size(); i++)
-            if (lista.get(i).isEqual(hoy)) return i;
-        return -1;
     }
 }
