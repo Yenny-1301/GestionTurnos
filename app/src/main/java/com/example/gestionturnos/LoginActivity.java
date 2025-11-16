@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 UsuarioRepository repo = new UsuarioRepository(LoginActivity.this);
-                usuarioExistente = repo.validarLogin(correo.getText().toString(), contraseña.getText().toString());
+                usuarioExistente = repo.validarLogin(correo.getText().toString(), contrasenia.getText().toString());
 
                 if (!usuarioExistente) {
                     correo.setError("Usuario Incorrecto");

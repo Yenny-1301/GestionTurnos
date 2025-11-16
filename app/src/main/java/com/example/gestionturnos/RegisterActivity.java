@@ -17,10 +17,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.gestionturnos.data.MyDatabaseHelper;
-import com.example.gestionturnos.data.dao.UserDAO;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -168,7 +165,11 @@ public class RegisterActivity extends AppCompatActivity {
                     Usuario user = new Usuario();
                     user.setEmail( correo.getText().toString().trim());
                     user.setPassword(contrasenia.getText().toString().trim());
-                    userData.addUser(user);
+                    long id = repo.insertarUsuario(user);
+
+                    if(id > 0){
+                        SessionManager.guardarUsuarioActivo(RegisterActivity.this, (int) id);
+                    }
                     mostrarDialogRegistro();}}
 
                     //Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -179,14 +180,6 @@ public class RegisterActivity extends AppCompatActivity {
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.registro_mensaje);
 
-                    long id = repo.insertarUsuario(user);
-
-                    if(id > 0){
-                        SessionManager.guardarUsuarioActivo(RegisterActivity.this, (int) id);
-                    }
-                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
                         Window window = dialog.getWindow();
                         if (window != null) {
                             // Fondo completamente transparente para el window
