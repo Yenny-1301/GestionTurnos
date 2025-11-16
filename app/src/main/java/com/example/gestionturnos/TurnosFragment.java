@@ -15,12 +15,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.gestionturnos.data.entities.TurnoEntity;
+import com.example.gestionturnos.data.repository.TurnoRepository;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClickListener, TurnoAdapter.OnStatusChangeListener {
 
@@ -32,10 +36,14 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
     private TurnoAdapter adapter;
     private List<Turno> listaTurnos;
     private List<Turno> turnosFiltrados;
-    private String estadoSeleccionado = "Pendiente"; // Estado inicial
+    private String estadoSeleccionado = "Pendiente";
     private View rootView;
 
-    // Referencias a los cards y textos
+    // AGREGADO
+    private TurnoRepository turnoRepository;
+    private ExecutorService executorService;
+    private int usuarioId;
+
     private MaterialCardView cardPendiente, cardConfirmado, cardCancelado;
     private TextView tvPendiente, tvConfirmado, tvCancelado;
 
@@ -44,6 +52,15 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
             listaTurnos = new ArrayList<>();
             turnosFiltrados = new ArrayList<>();
         }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // AGREGADO
+        turnoRepository = new TurnoRepository(requireContext());
+        executorService = Executors.newSingleThreadExecutor();
+        usuarioId = SessionManager.obtenerUsuarioActivo(requireContext());
     }
 
     @Override
@@ -59,7 +76,6 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_turnos, container, false);
-        View estadosView = LayoutInflater.from(requireContext()).inflate(R.layout.item_estado, container, false);
 
         // --- Filtro de fechas ---
         RecyclerView rvFechas = rootView.findViewById(R.id.rvFechas);
@@ -114,8 +130,8 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
         adapter.setOnEditClickListener(this);
         adapter.setOnStatusChangeListener(this);
 
-        // Aplicar filtro inicial
-        filtrarPorEstado(estadoSeleccionado);
+        // AGREGADO: Cargar turnos desde la BD
+        cargarTurnosDesdeBaseDatos();
 
         // --- Botón flotante ---
         FloatingActionButton fab = rootView.findViewById(R.id.fabAddTurno);
@@ -128,25 +144,121 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
 
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_NUEVO, this,
                 (requestKey, result) -> {
-                    Turno nuevoTurno = (Turno) result.getSerializable("turno");
-                    if (nuevoTurno != null) {
-                        listaTurnos.add(nuevoTurno);
-                        filtrarPorEstado(estadoSeleccionado);
-                    }
+                    // Recargar turnos después de agregar uno nuevo
+                    cargarTurnosDesdeBaseDatos();
                 });
 
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_EDITADO, this,
                 (requestKey, result) -> {
-                    Turno turnoEditado = (Turno) result.getSerializable("turno");
-                    if (turnoEditado == null) return;
-                    int position = listaTurnos.indexOf(turnoEditado);
-                    if (position != -1) {
-                        listaTurnos.set(position, turnoEditado);
-                        filtrarPorEstado(estadoSeleccionado);
-                    }
+                    // Recargar turnos después de editar
+                    cargarTurnosDesdeBaseDatos();
                 });
 
         return rootView;
+    }
+
+    /**
+     * AGREGADO: Carga los turnos desde la base de datos
+     */
+    private void cargarTurnosDesdeBaseDatos() {
+        executorService.execute(() -> {
+            try {
+                List<TurnoEntity> turnosEntity = turnoRepository.obtenerTurnosPorUsuario(usuarioId);
+
+                // Convertir TurnoEntity a Turno
+                List<Turno> turnosCargados = new ArrayList<>();
+                for (TurnoEntity entity : turnosEntity) {
+                    Turno turno = convertirEntityATurno(entity);
+                    turnosCargados.add(turno);
+                }
+
+                requireActivity().runOnUiThread(() -> {
+                    listaTurnos.clear();
+                    listaTurnos.addAll(turnosCargados);
+                    filtrarPorEstado(estadoSeleccionado);
+                });
+            } catch (Exception e) {
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(requireContext(), "Error al cargar turnos: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
+
+    /**
+     * AGREGADO: Convierte TurnoEntity a Turno
+     */
+    private Turno convertirEntityATurno(TurnoEntity entity) {
+        Turno turno = new Turno();
+        turno.setId(entity.id); // IMPORTANTE: Asignar el ID
+        turno.setNombreCliente(entity.nombreCliente);
+        turno.setApellidoCliente(entity.apellidoCliente);
+        turno.setContacto(entity.contacto);
+        turno.setComentarios(entity.comentarios);
+        turno.setServicioId(entity.servicioId);
+        turno.setEstadoId(entity.estadoId);
+
+        // Separar fechaTurno en fecha y hora
+        String[] fechaHora = separarFechaHora(entity.fechaTurno);
+        turno.setFecha(fechaHora[0]);
+        turno.setHora(fechaHora[1]);
+
+        // Convertir estadoId a texto
+        String estadoTexto = convertirEstadoIdATexto(entity.estadoId);
+        turno.setEstado(estadoTexto);
+
+        // TODO: Obtener nombre del servicio desde ServicioRepository si es necesario
+        turno.setServicio("Servicio #" + entity.servicioId);
+
+        return turno;
+    }
+
+    /**
+     * AGREGADO: Separa "yyyy-MM-dd HH:mm" en ["dd/MM/yyyy", "HH:mm"]
+     */
+    private String[] separarFechaHora(String fechaTurno) {
+        String[] resultado = new String[2];
+
+        try {
+            String[] partes = fechaTurno.split(" ");
+            if (partes.length >= 2) {
+                // Convertir yyyy-MM-dd a dd/MM/yyyy
+                String[] fechaParts = partes[0].split("-");
+                if (fechaParts.length == 3) {
+                    resultado[0] = fechaParts[2] + "/" + fechaParts[1] + "/" + fechaParts[0];
+                } else {
+                    resultado[0] = partes[0];
+                }
+
+                resultado[1] = partes[1];
+            } else {
+                resultado[0] = "";
+                resultado[1] = "";
+            }
+        } catch (Exception e) {
+            resultado[0] = "";
+            resultado[1] = "";
+        }
+
+        return resultado;
+    }
+
+    /**
+     * AGREGADO: Convierte estadoId numérico a texto
+     */
+    private String convertirEstadoIdATexto(Integer estadoId) {
+        if (estadoId == null) return Turno.ESTADO_PENDIENTE;
+
+        switch (estadoId) {
+            case TurnoRepository.ESTADO_PENDIENTE:
+                return Turno.ESTADO_PENDIENTE;
+            case TurnoRepository.ESTADO_CONFIRMADO:
+                return Turno.ESTADO_CONFIRMADO;
+            case TurnoRepository.ESTADO_CANCELADO:
+                return Turno.ESTADO_CANCELADO;
+            default:
+                return Turno.ESTADO_PENDIENTE;
+        }
     }
 
     private void inicializarFiltrosEstado() {
@@ -175,7 +287,6 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
         cardConfirmado.setOnClickListener(estadoClickListener);
         cardCancelado.setOnClickListener(estadoClickListener);
 
-        // Actualizar colores iniciales
         actualizarColores();
     }
 
@@ -191,17 +302,14 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
         int colorConfirmado = ContextCompat.getColor(context, R.color.green);
         int colorCancelado = ContextCompat.getColor(context, R.color.red);
 
-        // Pendiente
         boolean isPendienteSeleccionado = estadoSeleccionado.equals("Pendiente");
         cardPendiente.setCardBackgroundColor(isPendienteSeleccionado ? colorPendiente : colorInactivo);
         tvPendiente.setTextColor(isPendienteSeleccionado ? colorTextoActivo : colorTextoInactivo);
 
-        // Confirmado
         boolean isConfirmadoSeleccionado = estadoSeleccionado.equals("Confirmado");
         cardConfirmado.setCardBackgroundColor(isConfirmadoSeleccionado ? colorConfirmado : colorInactivo);
         tvConfirmado.setTextColor(isConfirmadoSeleccionado ? colorTextoActivo : colorTextoInactivo);
 
-        // Cancelado
         boolean isCanceladoSeleccionado = estadoSeleccionado.equals("Cancelado");
         cardCancelado.setCardBackgroundColor(isCanceladoSeleccionado ? colorCancelado : colorInactivo);
         tvCancelado.setTextColor(isCanceladoSeleccionado ? colorTextoActivo : colorTextoInactivo);
@@ -221,20 +329,64 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
 
     @Override
     public void onEditClick(Turno turno) {
-        TurnoFormFragment formFragment = new TurnoFormFragment();
         Bundle args = new Bundle();
-        args.putSerializable("turno", turno);
-        formFragment.setArguments(args);
-        ((NavigationHost) requireActivity()).navigateTo(formFragment, true);
+        args.putInt("turnoId", turno.getId()); // CORREGIDO
+
+        TurnoFormFragment fragment = new TurnoFormFragment();
+        fragment.setArguments(args);
+
+        getParentFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
     public void onStatusChange(Turno turno, String nuevoEstado) {
-        int position = listaTurnos.indexOf(turno);
-        if (position != -1) {
-            Turno turnoActualizar = listaTurnos.get(position);
-            turnoActualizar.setEstado(nuevoEstado);
-            filtrarPorEstado(estadoSeleccionado);
+        // ACTUALIZADO: Cambiar estado en la base de datos
+        executorService.execute(() -> {
+            try {
+                int nuevoEstadoId = convertirTextoAEstadoId(nuevoEstado);
+
+                // Actualizar estado en la BD
+                TurnoEntity entity = turnoRepository.obtenerTurnoPorId(turno.getId());
+                if (entity != null) {
+                    entity.estadoId = nuevoEstadoId;
+                    turnoRepository.actualizarTurno(entity);
+                }
+
+                requireActivity().runOnUiThread(() -> {
+                    // Actualizar en memoria
+                    int position = listaTurnos.indexOf(turno);
+                    if (position != -1) {
+                        Turno turnoActualizar = listaTurnos.get(position);
+                        turnoActualizar.setEstado(nuevoEstado);
+                        turnoActualizar.setEstadoId(nuevoEstadoId);
+                        filtrarPorEstado(estadoSeleccionado);
+                    }
+                    Toast.makeText(requireContext(), "Estado actualizado", Toast.LENGTH_SHORT).show();
+                });
+            } catch (Exception e) {
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(requireContext(), "Error al actualizar estado: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
+
+    /**
+     * AGREGADO: Convierte texto de estado a ID numérico
+     */
+    private int convertirTextoAEstadoId(String estadoTexto) {
+        switch (estadoTexto) {
+            case Turno.ESTADO_CONFIRMADO:
+                return TurnoRepository.ESTADO_CONFIRMADO;
+            case Turno.ESTADO_CANCELADO:
+                return TurnoRepository.ESTADO_CANCELADO;
+            case Turno.ESTADO_PENDIENTE:
+            default:
+                return TurnoRepository.ESTADO_PENDIENTE;
         }
     }
 
@@ -245,5 +397,13 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
             lista.add(hoy.plusDays(i));
         }
         return lista;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (executorService != null && !executorService.isShutdown()) {
+            executorService.shutdown();
+        }
     }
 }

@@ -5,30 +5,28 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 import androidx.room.ColumnInfo;
 
-import java.util.Date;
-
 @Entity(
-    tableName = "turnos",
-    foreignKeys = {
-        @ForeignKey(
-                entity = UsuarioEntity.class,
-                parentColumns = "id",
-                childColumns = "usuario_id",
-                onDelete = ForeignKey.CASCADE
-        ),
-        @ForeignKey(
-                entity = ServicioEntity.class,
-                parentColumns = "id",
-                childColumns = "servicio_id",
-                onDelete = ForeignKey.CASCADE
-        ),
-        @ForeignKey(
-                entity = EstadoEntity.class,
-                parentColumns = "id",
-                childColumns = "estado_id",
-                onDelete = ForeignKey.SET_NULL
-        )
-    }
+        tableName = "turnos",
+        foreignKeys = {
+                @ForeignKey(
+                        entity = UsuarioEntity.class,
+                        parentColumns = "id",
+                        childColumns = "usuario_id",
+                        onDelete = ForeignKey.CASCADE
+                ),
+                @ForeignKey(
+                        entity = ServicioEntity.class,
+                        parentColumns = "id",
+                        childColumns = "servicio_id",
+                        onDelete = ForeignKey.CASCADE
+                ),
+                @ForeignKey(
+                        entity = EstadoEntity.class,
+                        parentColumns = "id",
+                        childColumns = "estado_id",
+                        onDelete = ForeignKey.SET_NULL
+                )
+        }
 )
 public class TurnoEntity {
 
@@ -57,10 +55,11 @@ public class TurnoEntity {
     @ColumnInfo(name = "fecha_turno")
     public String fechaTurno;
 
+    public String hora;
+
     @ColumnInfo(name = "fecha_creacion")
     public String fechaCreacion;
 
     @ColumnInfo(name = "fecha_actualizacion")
     public String fechaActualizacion;
 }
-
