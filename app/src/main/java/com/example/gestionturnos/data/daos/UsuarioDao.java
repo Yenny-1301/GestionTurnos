@@ -12,7 +12,7 @@ import java.util.List;
 public interface UsuarioDao {
 
     @Insert
-    void insert(UsuarioEntity usuario);
+    long insert(UsuarioEntity usuario);
 
     @Query("SELECT * FROM usuarios")
     List<UsuarioEntity> getAll();

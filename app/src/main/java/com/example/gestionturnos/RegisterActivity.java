@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.gestionturnos.data.entities.UsuarioEntity;
 import com.example.gestionturnos.data.repository.UsuarioRepository;
 
 
@@ -104,15 +105,26 @@ public class RegisterActivity extends AppCompatActivity {
                     checkboxError.setText("Debes aceptar los Términos y condiciones");
                     camposValidos = false;
                 }
+
+                UsuarioRepository repo = new UsuarioRepository(RegisterActivity.this);
+                UsuarioEntity usuarioRegistrado = repo.obtenerUsuarioPorEmail(correo.getText().toString());
+
+                if(usuarioRegistrado != null){
+                    correo.setError("El correo ya se encuentra registrado");
+                    camposValidos = false;
+                }
+
                 if (camposValidos) {
 
                     Usuario user = new Usuario();
                     user.setEmail( correo.getText().toString().trim());
                     user.setPassword(contrasenia.getText().toString().trim());
 
-                    UsuarioRepository repo = new UsuarioRepository();
-                    repo.insertarUsuario(RegisterActivity.this, user);
+                    long id = repo.insertarUsuario(user);
 
+                    if(id > 0){
+                        SessionManager.guardarUsuarioActivo(RegisterActivity.this, (int) id);
+                    }
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();

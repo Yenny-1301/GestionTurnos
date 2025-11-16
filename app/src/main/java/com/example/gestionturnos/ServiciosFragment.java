@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.gestionturnos.data.repository.ServicioRepository;
 import com.google.android.material.button.MaterialButton;
 import androidx.appcompat.app.AlertDialog;
 
@@ -44,6 +46,10 @@ public class ServiciosFragment extends Fragment implements ServicioAdapter.OnEdi
 
         View view = inflater.inflate(R.layout.fragment_servicios, container, false);
 
+        ServicioRepository repo = new ServicioRepository(requireContext());
+        listaServicios.clear();
+        listaServicios.addAll(repo.obtenerPorUsuario(SessionManager.obtenerUsuarioActivo(requireContext())));
+
         recyclerView = view.findViewById(R.id.rvServicios);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -63,6 +69,8 @@ public class ServiciosFragment extends Fragment implements ServicioAdapter.OnEdi
 
             btnSi.setOnClickListener(v -> {
                 listaServicios.remove(position);
+                repo.eliminarServicio(servicio.getId());
+
                 adapter.notifyItemRemoved(position);
                 dialog.dismiss();
             });

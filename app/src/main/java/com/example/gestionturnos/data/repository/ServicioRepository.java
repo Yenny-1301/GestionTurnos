@@ -82,6 +82,7 @@ public class ServicioRepository {
 
         for (ServicioEntity entity : entities) {
             Servicio s = new Servicio();
+            s.setId(entity.id);
             s.setNombreServicio(entity.nombre);
             s.setMinutos(String.valueOf(entity.duracion));
             s.setPrecio(String.valueOf(entity.precio));

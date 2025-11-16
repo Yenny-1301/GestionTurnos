@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import java.io.Serializable;
 import java.util.Objects;
 public class Servicio implements Serializable{
+    private int id;
     private String nombreServicio;
     private String minutos;
     private String precio;
@@ -17,13 +18,15 @@ public class Servicio implements Serializable{
     }
 
     public Servicio() { this.precio = "0"; }
+
+    public int getId() { return id; }
     public String getNombreServicio() { return nombreServicio; }
     public String getMinutos() { return minutos; }
     public String getPrecio() { return precio; }
 
+    public void setId(int id) { this.id = id; }
     public void setNombreServicio(String nombreServicio) { this.nombreServicio = nombreServicio; }
     public void setMinutos(String minutos) { this.minutos = minutos; }
-
     public void setPrecio(String precio) { this.precio = precio; }
 
     @Override
