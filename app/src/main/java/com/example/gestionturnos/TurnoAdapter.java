@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.core.content.ContextCompat;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,13 +56,40 @@ public class TurnoAdapter extends RecyclerView.Adapter<TurnoAdapter.TurnoViewHol
         holder.txtServicio.setText(turno.getServicio());
         holder.chipEstado.setText(turno.getEstado());
 
-        int colorTexto = turno.getEstadoColorResource(context);
-        holder.chipEstado.setTextColor(colorTexto);
-        holder.chipEstado.setChipStrokeColorResource(R.color.azul);
+        // Configurar la cerd de turno segun el estado
+        String estado = turno.getEstado();
+        if(estado.equals(Turno.ESTADO_CONFIRMADO)){
+            holder.chipEstado.setChipBackgroundColorResource(android.R.color.transparent);
+            holder.chipEstado.setTextColor(ContextCompat.getColor(context, R.color.green));
+            holder.chipEstado.setChipStrokeWidth(1);
+            holder.chipEstado.setChipStrokeColorResource(R.color.green);
+
+            //ocultar boton confirmar
+            holder.btnConfirmar.setVisibility(View.GONE);
+        } else if(estado.equals(Turno.ESTADO_PENDIENTE)){
+            holder.chipEstado.setChipBackgroundColorResource(android.R.color.transparent);
+            holder.chipEstado.setTextColor(ContextCompat.getColor(context, R.color.azul));
+            holder.chipEstado.setChipStrokeColorResource(R.color.azul);
+            holder.chipEstado.setChipStrokeWidth(1);
+            //mostrar boton confirmar
+            holder.btnConfirmar.setVisibility(View.VISIBLE);
+        } else if (estado.equals(Turno.ESTADO_CANCELADO)) {
+            holder.chipEstado.setChipBackgroundColorResource(R.color.red_25);
+            holder.chipEstado.setTextColor(ContextCompat.getColor(context, R.color.red));
+            holder.chipEstado.setChipStrokeColorResource(R.color.red);
+            holder.chipEstado.setChipStrokeWidth(1);
+            // Ocultar botones
+            holder.btnConfirmar.setVisibility(View.GONE);
+            holder.btnCancelar.setVisibility(View.GONE);
+            holder.btnEditar.setVisibility(View.GONE);
+        }
+        //int colorTexto = turno.getEstadoColorResource(context);
+        //holder.chipEstado.setTextColor(colorTexto);
+        //holder.chipEstado.setChipStrokeColorResource(R.color.azul);
 
         holder.btnEditar.setOnClickListener(v -> {
-            if (onEditClickListener != null && position != RecyclerView.NO_POSITION) {
-                onEditClickListener.onEditClick(turnos.get(position));
+           if (onEditClickListener != null && position != RecyclerView.NO_POSITION) {
+               onEditClickListener.onEditClick(turnos.get(position));
             }
         });
 

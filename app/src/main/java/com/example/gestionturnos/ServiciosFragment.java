@@ -1,6 +1,10 @@
 package com.example.gestionturnos;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 
 import com.example.gestionturnos.data.repository.ServicioRepository;
 import com.google.android.material.button.MaterialButton;
@@ -58,14 +64,20 @@ public class ServiciosFragment extends Fragment implements ServicioAdapter.OnEdi
         adapter.setOnEditClickListener(this);
 
         adapter.setOnDeleteClickListener((servicio, position) -> {
-            View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_eliminar_servicio, null);
+            mostrarDialogEliminarServicio(servicio, position, repo);
+        });
+        /*adapter.setOnDeleteClickListener((servicio, position) -> {
+            View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_eliminar_servicio, (ViewGroup) getView(), false);
 
             AlertDialog dialog = new AlertDialog.Builder(getContext())
                     .setView(dialogView)
                     .create();
-
+            if (dialog.getWindow() != null) {
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
             MaterialButton btnSi = dialogView.findViewById(R.id.btnSiEliminar);
             MaterialButton btnNo = dialogView.findViewById(R.id.btnNoVolver);
+            MaterialButton btnCerrar = dialogView.findViewById(R.id.btnCerrar);
 
             btnSi.setOnClickListener(v -> {
                 listaServicios.remove(position);
@@ -79,8 +91,10 @@ public class ServiciosFragment extends Fragment implements ServicioAdapter.OnEdi
                 dialog.dismiss();
             });
 
+            btnCerrar.setOnClickListener(v -> dialog.dismiss());
+
             dialog.show();
-        });
+        });*/
 
         final String REQUEST_KEY_NUEVO = ServicioNuevoFragment.REQUEST_KEY_NUEVO;
         final String REQUEST_KEY_EDITADO = ServicioNuevoFragment.REQUEST_KEY_EDITADO;
@@ -126,5 +140,34 @@ public class ServiciosFragment extends Fragment implements ServicioAdapter.OnEdi
                 formFragment,
                 true
         );
+    }
+
+    private void mostrarDialogEliminarServicio(Servicio servicio, int position, ServicioRepository repo) {
+        //misma logica que en cerrar sesion
+        Dialog dialog = new Dialog(requireContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_eliminar_servicio);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCancelable(true);
+
+        MaterialButton btnSi = dialog.findViewById(R.id.btnSiEliminar);
+        MaterialButton btnNo = dialog.findViewById(R.id.btnNoVolver);
+        MaterialButton btnCerrar = dialog.findViewById(R.id.btnCerrar);
+
+        btnCerrar.setOnClickListener(v -> dialog.dismiss());
+        btnNo.setOnClickListener(v -> dialog.dismiss());
+
+        btnSi.setOnClickListener(v -> {
+            dialog.dismiss();
+
+            // Eliminar del repositorio
+            repo.eliminarServicio(servicio.getId());
+
+            // Eliminar de la lista y actualizar el adapter
+            listaServicios.remove(position);
+            adapter.notifyItemRemoved(position);
+        });
+
+        dialog.show();
     }
 }

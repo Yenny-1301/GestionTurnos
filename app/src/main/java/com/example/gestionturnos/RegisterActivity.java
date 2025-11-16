@@ -80,7 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 // Toggle mostrar contraseña para verificación
         iconoPassVerif.setOnClickListener(new View.OnClickListener() {
-            boolean visible = true; // ⭐ CAMBIAR A true
+            boolean visible = true;
 
             @Override
             public void onClick(View v) {
@@ -131,7 +131,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 boolean camposValidos = true;
-                // MANEJO DE ERRORS
+                // manejo de errores SE DEBE ACTUALIZAAR
                 if (emailEditText.getText().toString().trim().isEmpty()) {
                     emailLayout.setError("Completar campo");
                     camposValidos = false;
