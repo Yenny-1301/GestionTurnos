@@ -124,6 +124,8 @@
                         android:background="?attr/inputBackground"
                         android:hint="Contraseña"
                         android:minHeight="48dp"
+                        android:inputType="textPassword"
+                        android:fontFamily="sans-serif"
                         android:padding="8dp"
                         android:textColor="?attr/colorOnSurface"
                         android:textColorHint="?attr/colorOnSurfaceVariant"

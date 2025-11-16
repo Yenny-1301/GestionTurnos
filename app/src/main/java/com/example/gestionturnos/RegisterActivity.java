@@ -40,7 +40,6 @@ public class RegisterActivity extends AppCompatActivity {
         CheckBox terminosCond = findViewById(R.id.checkbox_terminos);
         TextView checkboxError = findViewById(R.id.checkboxError);
 
-
         ImageView iconoPass = findViewById(R.id.iconoPass);
         ImageView iconoPassVerif = findViewById(R.id.iconoPassVerif);
 
@@ -51,23 +50,57 @@ public class RegisterActivity extends AppCompatActivity {
         TextInputEditText passwordEditText = findViewById(R.id.textoPass);
         TextInputEditText passwordVerifEditText = findViewById(R.id.textoPassVerif);
 
+        // ⭐ FORZAR QUE INICIE COMO PASSWORD
+        contrasenia.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        contrasenia.setTypeface(android.graphics.Typeface.DEFAULT);
+
+
         // Toggle mostrar contraseña
         iconoPass.setOnClickListener(new View.OnClickListener() {
-            boolean visible = false;
+            boolean visible = true; // ⭐ CAMBIAR A true (porque empieza oculta)
 
             @Override
             public void onClick(View v) {
                 if (visible) {
-                    contrasenia.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    iconoPass.setImageResource(R.drawable.icon_passclose);
-                } else {
+                    // Mostrar contraseña
                     contrasenia.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    contrasenia.setTypeface(android.graphics.Typeface.DEFAULT);
                     iconoPass.setImageResource(R.drawable.icon_passopen);
+                    visible = false;
+                } else {
+                    // Ocultar contraseña
+                    contrasenia.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    contrasenia.setTypeface(android.graphics.Typeface.DEFAULT);
+                    iconoPass.setImageResource(R.drawable.icon_passclose);
+                    visible = true;
                 }
-                visible = !visible;
                 contrasenia.setSelection(contrasenia.getText().length());
             }
         });
+
+// Toggle mostrar contraseña para verificación
+        iconoPassVerif.setOnClickListener(new View.OnClickListener() {
+            boolean visible = true; // ⭐ CAMBIAR A true
+
+            @Override
+            public void onClick(View v) {
+                if (visible) {
+                    // Mostrar contraseña
+                    contraseniaVerif.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    contraseniaVerif.setTypeface(android.graphics.Typeface.DEFAULT);
+                    iconoPassVerif.setImageResource(R.drawable.icon_passopen);
+                    visible = false;
+                } else {
+                    // Ocultar contraseña
+                    contraseniaVerif.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    contraseniaVerif.setTypeface(android.graphics.Typeface.DEFAULT);
+                    iconoPassVerif.setImageResource(R.drawable.icon_passclose);
+                    visible = true;
+                }
+                contraseniaVerif.setSelection(contraseniaVerif.getText().length());
+            }
+        });
+
 
         // Toggle mostrar contraseña para verificación
         iconoPassVerif.setOnClickListener(new View.OnClickListener() {
@@ -139,41 +172,42 @@ public class RegisterActivity extends AppCompatActivity {
                     //Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     //startActivity(intent);
                     //finish();
-            private void mostrarDialogRegistro() {
-                Dialog dialog = new Dialog(RegisterActivity.this);
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.registro_mensaje);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.setCancelable(true);
+                    private void mostrarDialogRegistro() {
+                        Dialog dialog = new Dialog(RegisterActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.registro_mensaje);
 
-                // ajustar tamaño de dialogo
-                Window window = dialog.getWindow();
-                if (window != null) {
-                    window.setLayout(
-                            ViewGroup.LayoutParams.MATCH_PARENT,  // ancho
-                            ViewGroup.LayoutParams.WRAP_CONTENT   // alto
-                    );
-                    // agrega márgenes laterales
-                    WindowManager.LayoutParams layoutParams = window.getAttributes();
-                    layoutParams.width = (int) (getResources().getDisplayMetrics().widthPixels * 0.9); // 90% del ancho de pantalla
-                    // ⭐ AGREGAR EFECTO DE DESENFOQUE/OSCURECIMIENTO
-                    layoutParams.dimAmount = 0.7f; // 0.0 (sin oscurecer) a 1.0 (completamente oscuro)
-                    layoutParams.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-                    window.setAttributes(layoutParams);
-                }
+                        Window window = dialog.getWindow();
+                        if (window != null) {
+                            // Fondo completamente transparente para el window
+                            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-                // botones del dialogo
-                MaterialButton btnIrAInicio = dialog.findViewById(R.id.btnIrAInicio);
+                            // Configurar tamaño
+                            window.setLayout(
+                                    (int) (getResources().getDisplayMetrics().widthPixels * 0.9),
+                                    ViewGroup.LayoutParams.WRAP_CONTENT
+                            );
 
-                btnIrAInicio.setOnClickListener(v -> {
-                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                });
+                            // ⭐ AGREGAR DESENFOQUE/OSCURECIMIENTO DEL FONDO
+                            window.setFlags(
+                                    WindowManager.LayoutParams.FLAG_DIM_BEHIND,
+                                    WindowManager.LayoutParams.FLAG_DIM_BEHIND
+                            );
+                            window.setDimAmount(0.8f); // 0.8 = más oscuro (prueba entre 0.6 - 0.9)
+                        }
 
-                dialog.show();
-        }
+                        dialog.setCancelable(true);
+                        dialog.setCanceledOnTouchOutside(false);
+
+                        MaterialButton btnIrAInicio = dialog.findViewById(R.id.btnIrAInicio);
+                        btnIrAInicio.setOnClickListener(v -> {
+                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        });
+
+                        dialog.show();
+                    }
             });
 
         TextWatcher clearErrorWatcher = new TextWatcher() {

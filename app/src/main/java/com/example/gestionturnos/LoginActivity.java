@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.log_in);
 
         EditText correo = findViewById(R.id.textoInput);
-        EditText contraseña = findViewById(R.id.textoPass);
+        EditText contrasenia = findViewById(R.id.textoPass);
         Button iniciarSesion = findViewById(R.id.inicioSesion);
         ImageView iconoPass = findViewById(R.id.iconoPass);
         TextView registrateAqui = findViewById(R.id.registrateAqui);
@@ -40,25 +40,33 @@ public class LoginActivity extends AppCompatActivity {
         TextInputEditText emailEditText = findViewById(R.id.textoInput);
         TextInputEditText passwordEditText = findViewById(R.id.textoPass);
 
+        // ⭐ FORZAR QUE INICIE COMO PASSWORD
+        contrasenia.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        contrasenia.setTypeface(android.graphics.Typeface.DEFAULT);
+
         iconoPass.setOnClickListener(new View.OnClickListener() {
-            boolean visible = false;
+            boolean visible = true; // ⭐ CAMBIAR A true (porque empieza oculta)
 
             @Override
             public void onClick(View v) {
-             if (visible) {
-                 // Ocultar contraseña
-                 contraseña.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                 iconoPass.setImageResource(R.drawable.icon_passclose);
-             } else {
-                 // Mostrar contraseña
-                 contraseña.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                 iconoPass.setImageResource(R.drawable.icon_passopen);
-             }
-             visible = !visible;
-             // Mantener el cursor al final
-             contraseña.setSelection(contraseña.getText().length());
+                if (visible) {
+                    // Mostrar contraseña
+                    contrasenia.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    contrasenia.setTypeface(android.graphics.Typeface.DEFAULT);
+                    iconoPass.setImageResource(R.drawable.icon_passopen);
+                    visible = false;
+                } else {
+                    // Ocultar contraseña
+                    contrasenia.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    contrasenia.setTypeface(android.graphics.Typeface.DEFAULT);
+                    iconoPass.setImageResource(R.drawable.icon_passclose);
+                    visible = true;
+                }
+                contrasenia.setSelection(contrasenia.getText().length());
             }
-            });
+        });
+
+
         //linkeo a la pantalla de registro
         registrateAqui.setOnClickListener(new View.OnClickListener() {
             @Override
