@@ -45,6 +45,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("com.google.android.material:material:1.9.0")
     implementation ("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.biometric:biometric:1.2.0-alpha05")
     annotationProcessor ("androidx.room:room-compiler:2.6.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

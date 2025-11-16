@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements TurnosFragment.Na
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // verificar si el usuario hizo log in
-        SharedPreferences prefs = getSharedPreferences("AppPref", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("usuario_prefs", MODE_PRIVATE);
         boolean isLoggedIn = prefs.getBoolean("isLoggedIn", false);
         //si no
         if(!isLoggedIn){

@@ -96,6 +96,7 @@ public class PerfilFragment extends Fragment {
 
         // Botón Cerrar sesion, cierra el dialgo y cierra la sesion del usuario
         btnSalir.setOnClickListener(v -> {
+            SessionManager.cerrarSesion(requireContext());
             dialog.dismiss();
             cerrarSesion();
         });
