@@ -21,6 +21,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import com.example.gestionturnos.data.entities.UsuarioEntity;
+import com.example.gestionturnos.data.repository.UsuarioRepository;
+
 public class LoginActivity extends AppCompatActivity {
 
     @Override
@@ -80,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 boolean camposValidos = true;
+                boolean usuarioExistente = false;
                 //validacion de campos
                 if (emailEditText.getText().toString().trim().isEmpty()) {
                     emailLayout.setError("Completar campo");
@@ -91,12 +95,24 @@ public class LoginActivity extends AppCompatActivity {
                     camposValidos = false;
                 }
 
+                UsuarioRepository repo = new UsuarioRepository(LoginActivity.this);
+                usuarioExistente = repo.validarLogin(correo.getText().toString(), contraseña.getText().toString());
+
+                if (!usuarioExistente) {
+                    correo.setError("Usuario Incorrecto");
+                    camposValidos = false;
+                }
+
+                //Agregar alerta de error
                 if (camposValidos) {
-                    // guardar estado de logueado del usuario
+                    UsuarioEntity usuario = repo.obtenerUsuarioPorEmail(correo.getText().toString());
+
                     SharedPreferences prefs = getSharedPreferences("AppPref", MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean("isLoggedIn", true);
                     editor.apply();
+                    SessionManager.guardarUsuarioActivo(LoginActivity.this, usuario.id);
+
                     // Continuar con el inicio de sesión si los campos fueron llenados correctamente
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);

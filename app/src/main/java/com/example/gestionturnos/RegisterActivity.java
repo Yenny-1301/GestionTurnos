@@ -25,6 +25,9 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import com.example.gestionturnos.data.entities.UsuarioEntity;
+import com.example.gestionturnos.data.repository.UsuarioRepository;
+
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -141,12 +144,8 @@ public class RegisterActivity extends AppCompatActivity {
                     passwordLayout.setError("Completar campo");
                     camposValidos = false;
                 }
-                if (passwordVerifEditText.getText().toString().isEmpty()) {
-                    passwordVerifLayout.setError("Completar campo");
-                }
-                if (!passwordVerifEditText.getText().toString()
-                        .equals(passwordEditText.getText().toString())) {
-                    passwordVerifLayout.setError("Las contraseñas no coinciden");
+                if (!contrasenia.getText().toString().trim().equals(contraseniaVerif.getText().toString().trim())) {
+                    contraseniaVerif.setError("Contraseña no coincide");
                     camposValidos = false;
                 }
                 //el checkbox debe estar chequeado
@@ -155,13 +154,16 @@ public class RegisterActivity extends AppCompatActivity {
                     checkboxError.setText("Debes aceptar los Términos y condiciones");
                     camposValidos = false;
                 }
-                if (camposValidos) {
-                    UserDAO userData = new UserDAO(RegisterActivity.this);
 
-//                    if (userData.getUserByEmail(correo.getText().toString().trim()) == null) {
-//                        Toast.makeText(RegisterActivity.this, "El correo ya está registrado", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
+                UsuarioRepository repo = new UsuarioRepository(RegisterActivity.this);
+                UsuarioEntity usuarioRegistrado = repo.obtenerUsuarioPorEmail(correo.getText().toString());
+
+                if(usuarioRegistrado != null){
+                    correo.setError("El correo ya se encuentra registrado");
+                    camposValidos = false;
+                }
+
+                if (camposValidos) {
 
                     Usuario user = new Usuario();
                     user.setEmail( correo.getText().toString().trim());
@@ -177,6 +179,14 @@ public class RegisterActivity extends AppCompatActivity {
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.registro_mensaje);
 
+                    long id = repo.insertarUsuario(user);
+
+                    if(id > 0){
+                        SessionManager.guardarUsuarioActivo(RegisterActivity.this, (int) id);
+                    }
+                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
                         Window window = dialog.getWindow();
                         if (window != null) {
                             // Fondo completamente transparente para el window

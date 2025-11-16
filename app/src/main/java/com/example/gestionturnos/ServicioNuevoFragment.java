@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
+import com.example.gestionturnos.data.repository.ServicioRepository;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
@@ -58,22 +59,30 @@ public class ServicioNuevoFragment extends Fragment {
 
         final String requestKey;
         final Servicio servicioParaEnviar;
+        ServicioRepository repo = new ServicioRepository(requireContext());
 
         if (servicioOriginal != null) {
             requestKey = REQUEST_KEY_EDITADO;
             servicioParaEnviar = servicioOriginal;
+
+            servicioParaEnviar.setNombreServicio(etNombreServicioNuevo.getText().toString());
+            servicioParaEnviar.setMinutos(etDuracionNuevo.getText().toString());
+            servicioParaEnviar.setPrecio(etPrecioNuevo.getText().toString());
+
+            repo.actualizarServicio(servicioParaEnviar.getId(), servicioParaEnviar);
+
         } else {
             requestKey = REQUEST_KEY_NUEVO;
             servicioParaEnviar = new Servicio();
-        }
-        servicioParaEnviar.setNombreServicio(etNombreServicioNuevo.getText().toString());
-        servicioParaEnviar.setMinutos(etDuracionNuevo.getText().toString());
-        servicioParaEnviar.setPrecio(etPrecioNuevo.getText().toString());
 
+            servicioParaEnviar.setNombreServicio(etNombreServicioNuevo.getText().toString());
+            servicioParaEnviar.setMinutos(etDuracionNuevo.getText().toString());
+            servicioParaEnviar.setPrecio(etPrecioNuevo.getText().toString());
+
+            repo.insertarServicio(SessionManager.obtenerUsuarioActivo(requireContext()), servicioParaEnviar);
+        }
 
         Bundle result = new Bundle();
-        result.putSerializable("servicio", servicioParaEnviar);
-        getParentFragmentManager().setFragmentResult(requestKey, result);
         closeFragment();
     }
 
