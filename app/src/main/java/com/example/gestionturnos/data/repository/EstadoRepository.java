@@ -25,7 +25,15 @@ public class EstadoRepository {
         return estadoDao.findById(id);
     }
 
-    public void insertarEstado(EstadoEntity estado) {
+    /*public void insertarEstado(EstadoEntity estado) {
         estadoDao.insert(estado);
+    }*/
+
+    public void inicializarEstadosSiFaltan() {
+        if (estadoDao.getAll().isEmpty()) {
+            estadoDao.insert(new EstadoEntity(1, "Pendiente"));
+            estadoDao.insert(new EstadoEntity(2, "Confirmado"));
+            estadoDao.insert(new EstadoEntity(3, "Cancelado"));
+        }
     }
 }

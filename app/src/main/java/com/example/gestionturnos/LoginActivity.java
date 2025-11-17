@@ -79,12 +79,12 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
-        // ⭐ FORZAR QUE INICIE COMO PASSWORD
+        // con esto se fuerrza a que la pass no muestre
         contrasenia.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         contrasenia.setTypeface(android.graphics.Typeface.DEFAULT);
 
         iconoPass.setOnClickListener(new View.OnClickListener() {
-            boolean visible = true; // ⭐ CAMBIAR A true (porque empieza oculta)
+            boolean visible = true;
 
             @Override
             public void onClick(View v) {

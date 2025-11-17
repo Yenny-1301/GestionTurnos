@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/colorSurface"
-        tools:context=".ServiciosFragment">
+        tools:context=".ServiciosFragment"
+        android:paddingTop="15dp">
 
         <LinearLayout
             android:id="@+id/layoutHeader"
@@ -44,7 +45,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
-
+            <TextView
+                android:id="@+id/tvEmptyServicios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No hay servicios disponibles"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textColor="@android:color/darker_gray"
+                android:visibility="gone"
+                android:layout_marginTop="24dp"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvServicios"
                 android:layout_width="match_parent"
@@ -62,7 +72,7 @@
             android:contentDescription="Agregar Servicio"
             android:src="@drawable/add_sign"
             app:tint="@android:color/white"
-            app:backgroundTint="@color/azul"
+            app:backgroundTint="@color/primaryViolet"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -35,4 +35,10 @@ public interface TurnoDao {
     TurnoEntity findById(int id);
     @Query("SELECT * FROM turnos WHERE fecha_turno = :fecha")
     List<TurnoEntity> getTurnosByFecha(String fecha);
+    // AGREGADOS - Para filtrar por estado
+    @Query("SELECT * FROM turnos WHERE estado_id = :estadoId")
+    List<TurnoEntity> getTurnosByEstado(int estadoId);
+
+    @Query("SELECT * FROM turnos WHERE usuario_id = :usuarioId AND estado_id = :estadoId")
+    List<TurnoEntity> getTurnosByUsuarioYEstado(int usuarioId, int estadoId);
 }
