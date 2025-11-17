@@ -332,7 +332,7 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
     @Override
     public void onEditClick(Turno turno) {
         Bundle args = new Bundle();
-        args.putInt("turnoId", turno.getId()); // CORREGIDO
+        args.putInt("turnoId", turno.getId());
 
         TurnoFormFragment fragment = new TurnoFormFragment();
         fragment.setArguments(args);

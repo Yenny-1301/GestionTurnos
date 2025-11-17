@@ -144,7 +144,9 @@ public class TurnoFormFragment extends Fragment {
                 .build();
 
         datePicker.addOnPositiveButtonClickListener(selection -> {
+            // Forzar UTC para evitar conversión de zona horaria
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
             String formattedDate = sdf.format(new Date(selection));
             etFecha.setText(formattedDate);
         });
