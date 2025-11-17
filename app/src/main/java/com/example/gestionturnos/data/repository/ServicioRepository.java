@@ -91,4 +91,7 @@ public class ServicioRepository {
 
         return servicios;
     }
+    public ServicioEntity obtenerServicioPorId(int servicioId) {
+        return db.servicioDao().findById(servicioId);
+    }
 }

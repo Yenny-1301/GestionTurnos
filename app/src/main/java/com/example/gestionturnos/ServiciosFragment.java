@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gestionturnos.data.repository.ServicioRepository;
 import com.google.android.material.button.MaterialButton;
@@ -36,6 +38,7 @@ public class ServiciosFragment extends Fragment implements ServicioAdapter.OnEdi
     private RecyclerView recyclerView;
     private ServicioAdapter adapter;
     private List<Servicio> listaServicios = new ArrayList<>();
+    private ServicioRepository repo;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -52,12 +55,42 @@ public class ServiciosFragment extends Fragment implements ServicioAdapter.OnEdi
 
         View view = inflater.inflate(R.layout.fragment_servicios, container, false);
 
-        ServicioRepository repo = new ServicioRepository(requireContext());
-        listaServicios.clear();
-        listaServicios.addAll(repo.obtenerPorUsuario(SessionManager.obtenerUsuarioActivo(requireContext())));
+        // Inicializar lista si no existe
+        if (listaServicios == null) {
+            listaServicios = new ArrayList<>();
+        }
+
+        try {
+            ServicioRepository repo = new ServicioRepository(requireContext());
+            int usuarioId = SessionManager.obtenerUsuarioActivo(requireContext());
+
+            List<Servicio> serviciosDb = repo.obtenerPorUsuario(usuarioId);
+
+            listaServicios.clear();
+            if (serviciosDb != null && !serviciosDb.isEmpty()) {
+                listaServicios.addAll(serviciosDb);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(requireContext(), "Error al cargar servicios: " + e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
 
         recyclerView = view.findViewById(R.id.rvServicios);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        TextView emptyView = view.findViewById(R.id.tvEmptyServicios);
+
+        // Validar vistas
+        if (emptyView != null && recyclerView != null) {
+            if (listaServicios.isEmpty()) {
+                emptyView.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+            } else {
+                emptyView.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        }
 
         adapter = new ServicioAdapter(listaServicios);
         recyclerView.setAdapter(adapter);
@@ -66,35 +99,7 @@ public class ServiciosFragment extends Fragment implements ServicioAdapter.OnEdi
         adapter.setOnDeleteClickListener((servicio, position) -> {
             mostrarDialogEliminarServicio(servicio, position, repo);
         });
-        /*adapter.setOnDeleteClickListener((servicio, position) -> {
-            View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_eliminar_servicio, (ViewGroup) getView(), false);
 
-            AlertDialog dialog = new AlertDialog.Builder(getContext())
-                    .setView(dialogView)
-                    .create();
-            if (dialog.getWindow() != null) {
-                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            }
-            MaterialButton btnSi = dialogView.findViewById(R.id.btnSiEliminar);
-            MaterialButton btnNo = dialogView.findViewById(R.id.btnNoVolver);
-            MaterialButton btnCerrar = dialogView.findViewById(R.id.btnCerrar);
-
-            btnSi.setOnClickListener(v -> {
-                listaServicios.remove(position);
-                repo.eliminarServicio(servicio.getId());
-
-                adapter.notifyItemRemoved(position);
-                dialog.dismiss();
-            });
-
-            btnNo.setOnClickListener(v -> {
-                dialog.dismiss();
-            });
-
-            btnCerrar.setOnClickListener(v -> dialog.dismiss());
-
-            dialog.show();
-        });*/
 
         final String REQUEST_KEY_NUEVO = ServicioNuevoFragment.REQUEST_KEY_NUEVO;
         final String REQUEST_KEY_EDITADO = ServicioNuevoFragment.REQUEST_KEY_EDITADO;

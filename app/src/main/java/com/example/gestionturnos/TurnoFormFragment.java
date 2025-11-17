@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.gestionturnos.data.entities.TurnoEntity;
 import com.example.gestionturnos.data.repository.ServicioRepository;
+import com.example.gestionturnos.data.repository.EstadoRepository;
 import com.example.gestionturnos.data.repository.TurnoRepository;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -37,15 +38,14 @@ public class TurnoFormFragment extends Fragment {
     private MaterialTextView etTitulo;
     private MaterialButton btnGuardar, btnCancelar;
     private Turno turnoOriginal;
-    private TurnoEntity turnoEntity; // AGREGADO - Para edición
+    private TurnoEntity turnoEntity;
     private TurnoRepository turnoRepository;
+    private EstadoRepository estadoRepository;
     private ServicioRepository servicioRepository;
     private ExecutorService executorService;
-
     private int usuarioId;
     private Map<String, Integer> serviciosMap;
     private List<Servicio> listaServicios;
-
     public static final String REQUEST_KEY_NUEVO = "nuevoTurnoRequest";
     public static final String REQUEST_KEY_EDITADO = "turnoEditadoRequest";
 
@@ -56,6 +56,8 @@ public class TurnoFormFragment extends Fragment {
         super.onCreate(savedInstanceState);
         turnoRepository = new TurnoRepository(requireContext());
         servicioRepository = new ServicioRepository(requireContext());
+        estadoRepository = new EstadoRepository(requireContext());
+        estadoRepository.inicializarEstadosSiFaltan();
         executorService = Executors.newSingleThreadExecutor();
         serviciosMap = new HashMap<>();
 
@@ -103,7 +105,6 @@ public class TurnoFormFragment extends Fragment {
         executorService.execute(() -> {
             try {
                 listaServicios = servicioRepository.obtenerPorUsuario(usuarioId);
-
                 requireActivity().runOnUiThread(() -> {
                     if (listaServicios.isEmpty()) {
                         Toast.makeText(requireContext(), "No hay servicios disponibles. Agregue servicios primero.", Toast.LENGTH_LONG).show();
@@ -287,7 +288,7 @@ public class TurnoFormFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (getArguments() != null) {
-            // Verificar si viene un TurnoEntity (desde la BD) o un Turno (modelo viejo)
+            // Verificar si viene un TurnoEntity (desde la BD) o un Turno
             turnoOriginal = (Turno) getArguments().getSerializable("turno");
             int turnoId = getArguments().getInt("turnoId", -1);
 
@@ -312,9 +313,7 @@ public class TurnoFormFragment extends Fragment {
         }
     }
 
-    /**
-     * Carga un turno desde la base de datos para editar
-     */
+    // Carga un turno desde la base de datos para editar
     private void cargarTurnoDesdeBaseDatos(int turnoId) {
         executorService.execute(() -> {
             try {
@@ -327,14 +326,14 @@ public class TurnoFormFragment extends Fragment {
                         etApellido.setText(turnoEntity.apellidoCliente);
                         etTelefono.setText(turnoEntity.contacto);
 
-                        // Extraer fecha y hora del fechaTurno concatenado
+                        // extraer fecga y hora
                         String[] fechaHora = separarFechaHora(turnoEntity.fechaTurno);
                         etFecha.setText(fechaHora[0]);
                         etHora.setText(fechaHora[1]);
 
                         etNotas.setText(turnoEntity.comentarios);
 
-                        // Buscar y seleccionar el servicio correspondiente
+                        // se busca el servicio con el ID
                         for (Servicio servicio : listaServicios) {
                             if (servicio.getId() == turnoEntity.servicioId) {
                                 actvServicio.setText(servicio.getNombreServicio() + " - $" + servicio.getPrecio(), false);
@@ -352,9 +351,7 @@ public class TurnoFormFragment extends Fragment {
         });
     }
 
-    /**
-     * Separa fechaTurno "yyyy-MM-dd HH:mm" en ["dd/MM/yyyy", "HH:mm"]
-     */
+    //Separa fechaTurno "yyyy-MM-dd HH:mm" en DOS componentes
     private String[] separarFechaHora(String fechaTurno) {
         String[] resultado = new String[2];
 

@@ -64,21 +64,28 @@ public class TurnoAdapter extends RecyclerView.Adapter<TurnoAdapter.TurnoViewHol
             holder.chipEstado.setChipStrokeWidth(1);
             holder.chipEstado.setChipStrokeColorResource(R.color.green);
 
-            //ocultar boton confirmar
+            // ocultar solo el boton de confirmar
             holder.btnConfirmar.setVisibility(View.GONE);
+            holder.btnCancelar.setVisibility(View.VISIBLE);
+            holder.btnEditar.setVisibility(View.VISIBLE);
+
         } else if(estado.equals(Turno.ESTADO_PENDIENTE)){
             holder.chipEstado.setChipBackgroundColorResource(android.R.color.transparent);
             holder.chipEstado.setTextColor(ContextCompat.getColor(context, R.color.azul));
             holder.chipEstado.setChipStrokeColorResource(R.color.azul);
             holder.chipEstado.setChipStrokeWidth(1);
-            //mostrar boton confirmar
+
+            //mostrar todos los botones
             holder.btnConfirmar.setVisibility(View.VISIBLE);
+            holder.btnCancelar.setVisibility(View.VISIBLE);
+            holder.btnEditar.setVisibility(View.VISIBLE);
         } else if (estado.equals(Turno.ESTADO_CANCELADO)) {
             holder.chipEstado.setChipBackgroundColorResource(R.color.red_25);
             holder.chipEstado.setTextColor(ContextCompat.getColor(context, R.color.red));
             holder.chipEstado.setChipStrokeColorResource(R.color.red);
             holder.chipEstado.setChipStrokeWidth(1);
-            // Ocultar botones
+
+            // Ocultar todos los botones
             holder.btnConfirmar.setVisibility(View.GONE);
             holder.btnCancelar.setVisibility(View.GONE);
             holder.btnEditar.setVisibility(View.GONE);

@@ -7,7 +7,7 @@ import android.widget.Toast;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import com.example.gestionturnos.data.repository.ServicioRepository;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.gestionturnos.data.entities.ServicioEntity;
 import com.example.gestionturnos.data.entities.TurnoEntity;
 import com.example.gestionturnos.data.repository.TurnoRepository;
 import com.google.android.material.card.MaterialCardView;
@@ -31,22 +32,19 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
     public interface NavigationHost {
         void navigateTo(Fragment fragment, boolean addToBackStack);
     }
-
     private RecyclerView recyclerView;
     private TurnoAdapter adapter;
     private List<Turno> listaTurnos;
     private List<Turno> turnosFiltrados;
     private String estadoSeleccionado = "Pendiente";
     private View rootView;
-
-    // AGREGADO
+    private ServicioRepository servicioRepository;
+    private LocalDate fechaSeleccionada = LocalDate.now();
     private TurnoRepository turnoRepository;
     private ExecutorService executorService;
     private int usuarioId;
-
     private MaterialCardView cardPendiente, cardConfirmado, cardCancelado;
     private TextView tvPendiente, tvConfirmado, tvCancelado;
-
     public TurnosFragment() {
         if (listaTurnos == null) {
             listaTurnos = new ArrayList<>();
@@ -57,7 +55,7 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // AGREGADO
+        servicioRepository = new ServicioRepository(requireContext());
         turnoRepository = new TurnoRepository(requireContext());
         executorService = Executors.newSingleThreadExecutor();
         usuarioId = SessionManager.obtenerUsuarioActivo(requireContext());
@@ -77,15 +75,17 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
 
         rootView = inflater.inflate(R.layout.fragment_turnos, container, false);
 
-        // --- Filtro de fechas ---
+        // componente filtro de fecha
         RecyclerView rvFechas = rootView.findViewById(R.id.rvFechas);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         rvFechas.setLayoutManager(layoutManager);
 
         List<LocalDate> fechas = generarFechas(10, 10);
 
-        FechaAdapter fechaAdapter = new FechaAdapter(fechas, (pos, fecha) ->
-                Toast.makeText(requireContext(), "Seleccionaste: " + fecha.toString(), Toast.LENGTH_SHORT).show());
+        FechaAdapter fechaAdapter = new FechaAdapter(fechas, (pos, fecha) -> {
+            fechaSeleccionada = fecha;
+            filtrarPorEstadoYFecha(estadoSeleccionado, fechaSeleccionada);
+        });
         rvFechas.setAdapter(fechaAdapter);
 
         LinearSnapHelper snapHelper = new LinearSnapHelper();
@@ -118,7 +118,7 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
                 }
         );
 
-        // --- Botones de estado ---
+        // componente filstro de estado
         inicializarFiltrosEstado();
 
         // --- Lista de turnos ---
@@ -130,7 +130,6 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
         adapter.setOnEditClickListener(this);
         adapter.setOnStatusChangeListener(this);
 
-        // AGREGADO: Cargar turnos desde la BD
         cargarTurnosDesdeBaseDatos();
 
         // --- Botón flotante ---
@@ -157,9 +156,7 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
         return rootView;
     }
 
-    /**
-     * AGREGADO: Carga los turnos desde la base de datos
-     */
+    //cargar los turnos que se encuentran en la base
     private void cargarTurnosDesdeBaseDatos() {
         executorService.execute(() -> {
             try {
@@ -167,30 +164,41 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
 
                 // Convertir TurnoEntity a Turno
                 List<Turno> turnosCargados = new ArrayList<>();
-                for (TurnoEntity entity : turnosEntity) {
-                    Turno turno = convertirEntityATurno(entity);
-                    turnosCargados.add(turno);
+                if (turnosEntity != null) {
+                    for (TurnoEntity entity : turnosEntity) {
+                        Turno turno = convertirEntityATurno(entity);
+                        turnosCargados.add(turno);
+                    }
                 }
 
-                requireActivity().runOnUiThread(() -> {
-                    listaTurnos.clear();
-                    listaTurnos.addAll(turnosCargados);
-                    filtrarPorEstado(estadoSeleccionado);
-                });
+                // Verificar que el fragmento sigue activo
+                if (getActivity() != null && isAdded()) {
+                    requireActivity().runOnUiThread(() -> {
+                        if (listaTurnos != null) {
+                            listaTurnos.clear();
+                            listaTurnos.addAll(turnosCargados);
+                            filtrarPorEstado(estadoSeleccionado);
+                        }
+                    });
+                }
             } catch (Exception e) {
-                requireActivity().runOnUiThread(() -> {
-                    Toast.makeText(requireContext(), "Error al cargar turnos: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                e.printStackTrace();
+                if (getActivity() != null && isAdded()) {
+                    requireActivity().runOnUiThread(() -> {
+                        Toast.makeText(requireContext(),
+                                "Error al cargar turnos: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    });
+                }
             }
         });
     }
 
-    /**
-     * AGREGADO: Convierte TurnoEntity a Turno
-     */
+
+    // convierte TurnoEntity a Turno
     private Turno convertirEntityATurno(TurnoEntity entity) {
         Turno turno = new Turno();
-        turno.setId(entity.id); // IMPORTANTE: Asignar el ID
+        turno.setId(entity.id);
         turno.setNombreCliente(entity.nombreCliente);
         turno.setApellidoCliente(entity.apellidoCliente);
         turno.setContacto(entity.contacto);
@@ -198,24 +206,29 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
         turno.setServicioId(entity.servicioId);
         turno.setEstadoId(entity.estadoId);
 
-        // Separar fechaTurno en fecha y hora
         String[] fechaHora = separarFechaHora(entity.fechaTurno);
         turno.setFecha(fechaHora[0]);
         turno.setHora(fechaHora[1]);
 
-        // Convertir estadoId a texto
         String estadoTexto = convertirEstadoIdATexto(entity.estadoId);
         turno.setEstado(estadoTexto);
 
-        // TODO: Obtener nombre del servicio desde ServicioRepository si es necesario
-        turno.setServicio("Servicio #" + entity.servicioId);
+        // Obtener nombre del servicio (esto en background thread)
+        String nombreServicio = obtenerNombreServicio(entity.servicioId);
+        turno.setServicio(nombreServicio);
 
         return turno;
     }
-
-    /**
-     * AGREGADO: Separa "yyyy-MM-dd HH:mm" en ["dd/MM/yyyy", "HH:mm"]
-     */
+    private String obtenerNombreServicio(int servicioId) {
+        try {
+            ServicioEntity servicio = servicioRepository.obtenerServicioPorId(servicioId);
+            return servicio != null ? servicio.nombre : "Servicio #" + servicioId;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Servicio #" + servicioId;
+        }
+    }
+    //Separa fechaTurno "yyyy-MM-dd HH:mm" en DOS componentes
     private String[] separarFechaHora(String fechaTurno) {
         String[] resultado = new String[2];
 
@@ -243,9 +256,7 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
         return resultado;
     }
 
-    /**
-     * AGREGADO: Convierte estadoId numérico a texto
-     */
+    // convierte estadoId (int) a texto
     private String convertirEstadoIdATexto(Integer estadoId) {
         if (estadoId == null) return Turno.ESTADO_PENDIENTE;
 
@@ -316,17 +327,8 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
     }
 
     private void filtrarPorEstado(String estado) {
-        turnosFiltrados.clear();
-
-        for (Turno turno : listaTurnos) {
-            if (turno.getEstado().equals(estado)) {
-                turnosFiltrados.add(turno);
-            }
-        }
-
-        adapter.notifyDataSetChanged();
+        filtrarPorEstadoYFecha(estado, fechaSeleccionada);
     }
-
     @Override
     public void onEditClick(Turno turno) {
         Bundle args = new Bundle();
@@ -337,14 +339,30 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
 
         getParentFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, fragment)
+                .replace(R.id.frameLayout, fragment)
                 .addToBackStack(null)
                 .commit();
     }
+    private void filtrarPorEstadoYFecha(String estado, LocalDate fecha) {
+        turnosFiltrados.clear();
 
+        // Convertir la fecha seleccionada a formato dd/MM/yyyy para comparar
+        String fechaFormateada = String.format("%02d/%02d/%d",
+                fecha.getDayOfMonth(),
+                fecha.getMonthValue(),
+                fecha.getYear());
+
+        for (Turno turno : listaTurnos) {
+            // Filtrar por estado Y por fecha
+            if (turno.getEstado().equals(estado) && turno.getFecha().equals(fechaFormateada)) {
+                turnosFiltrados.add(turno);
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+    }
     @Override
     public void onStatusChange(Turno turno, String nuevoEstado) {
-        // ACTUALIZADO: Cambiar estado en la base de datos
         executorService.execute(() -> {
             try {
                 int nuevoEstadoId = convertirTextoAEstadoId(nuevoEstado);
@@ -354,30 +372,37 @@ public class TurnosFragment extends Fragment implements TurnoAdapter.OnEditClick
                 if (entity != null) {
                     entity.estadoId = nuevoEstadoId;
                     turnoRepository.actualizarTurno(entity);
-                }
 
-                requireActivity().runOnUiThread(() -> {
-                    // Actualizar en memoria
-                    int position = listaTurnos.indexOf(turno);
-                    if (position != -1) {
-                        Turno turnoActualizar = listaTurnos.get(position);
-                        turnoActualizar.setEstado(nuevoEstado);
-                        turnoActualizar.setEstadoId(nuevoEstadoId);
-                        filtrarPorEstado(estadoSeleccionado);
+                    // Verificar que el fragmento sigue activo
+                    if (getActivity() != null && isAdded()) {
+                        requireActivity().runOnUiThread(() -> {
+                            // Actualizar en memoria
+                            int position = listaTurnos.indexOf(turno);
+                            if (position != -1) {
+                                Turno turnoActualizar = listaTurnos.get(position);
+                                turnoActualizar.setEstado(nuevoEstado);
+                                turnoActualizar.setEstadoId(nuevoEstadoId);
+                                filtrarPorEstado(estadoSeleccionado);
+                            }
+                            Toast.makeText(requireContext(), "Estado actualizado",
+                                    Toast.LENGTH_SHORT).show();
+                        });
                     }
-                    Toast.makeText(requireContext(), "Estado actualizado", Toast.LENGTH_SHORT).show();
-                });
+                }
             } catch (Exception e) {
-                requireActivity().runOnUiThread(() -> {
-                    Toast.makeText(requireContext(), "Error al actualizar estado: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                e.printStackTrace();
+                if (getActivity() != null && isAdded()) {
+                    requireActivity().runOnUiThread(() -> {
+                        Toast.makeText(requireContext(),
+                                "Error al actualizar estado: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    });
+                }
             }
         });
     }
 
-    /**
-     * AGREGADO: Convierte texto de estado a ID numérico
-     */
+    // convierte texto de estado a ID int
     private int convertirTextoAEstadoId(String estadoTexto) {
         switch (estadoTexto) {
             case Turno.ESTADO_CONFIRMADO:

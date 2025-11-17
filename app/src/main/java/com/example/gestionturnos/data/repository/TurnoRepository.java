@@ -33,23 +33,20 @@ public class TurnoRepository {
         entity.contacto = turno.getContacto();
         entity.comentarios = turno.getComentarios();
 
-        // Estado automático: siempre PENDIENTE al crear
+        // estado es PENDIENTE al crear un nuevo turno
         entity.estadoId = ESTADO_PENDIENTE;
 
-        // Concatenar fecha y hora
+        // concat fecha y hora
         entity.fechaTurno = concatenarFechaHora(turno.getFecha(), turno.getHora());
 
-        // Timestamps automáticos
+        // Timestamps
         String fechaActual = obtenerFechaActual();
         entity.fechaCreacion = fechaActual;
         entity.fechaActualizacion = fechaActual;
 
         db.turnoDao().insert(entity);
     }
-
-    /**
-     * Actualiza un turno existente con nuevos datos
-     */
+    //editar turno existentes
     public void actualizarTurnoCompleto(int turnoId, Turno turno) {
         TurnoEntity entity = obtenerTurnoPorId(turnoId);
 
@@ -61,7 +58,7 @@ public class TurnoRepository {
             entity.comentarios = turno.getComentarios();
             entity.fechaTurno = concatenarFechaHora(turno.getFecha(), turno.getHora());
 
-            // Mantener el estado actual si existe
+            // mantener el id estado
             if (turno.getEstadoId() != null) {
                 entity.estadoId = turno.getEstadoId();
             }
@@ -70,9 +67,7 @@ public class TurnoRepository {
         }
     }
 
-    /**
-     * Cambia el estado de un turno a CONFIRMADO
-     */
+    /* cambia el estado a confirmado
     public void confirmarTurno(int turnoId) {
         TurnoEntity turno = obtenerTurnoPorId(turnoId);
         if (turno != null) {
@@ -81,9 +76,7 @@ public class TurnoRepository {
         }
     }
 
-    /**
-     * Cambia el estado de un turno a CANCELADO
-     */
+    // cambia el estado a cancelado
     public void cancelarTurno(int turnoId) {
         TurnoEntity turno = obtenerTurnoPorId(turnoId);
         if (turno != null) {
@@ -92,16 +85,16 @@ public class TurnoRepository {
         }
     }
 
-    /**
+
      * Cambia el estado de un turno a PENDIENTE
-     */
+
     public void marcarComoPendiente(int turnoId) {
         TurnoEntity turno = obtenerTurnoPorId(turnoId);
         if (turno != null) {
             turno.estadoId = ESTADO_PENDIENTE;
             actualizarTurno(turno);
         }
-    }
+    }*/
 
     public List<TurnoEntity> obtenerTodosTurnos() {
         return db.turnoDao().getAll();
@@ -111,7 +104,7 @@ public class TurnoRepository {
         return db.turnoDao().getTurnosByUsuario(usuarioId);
     }
 
-    public List<TurnoEntity> obtenerTurnosPorServicio(int servicioId) {
+    /*public List<TurnoEntity> obtenerTurnosPorServicio(int servicioId) {
         return db.turnoDao().getTurnosByServicio(servicioId);
     }
 
@@ -121,7 +114,7 @@ public class TurnoRepository {
 
     public List<TurnoEntity> obtenerTurnosPorEstado(int estadoId) {
         return db.turnoDao().getTurnosByEstado(estadoId);
-    }
+    }*/
 
     public TurnoEntity obtenerTurnoPorId(int id) {
         return db.turnoDao().findById(id);
@@ -136,12 +129,12 @@ public class TurnoRepository {
         db.turnoDao().delete(turno);
     }
 
-    public void eliminarTurnoPorId(int id) {
+    /*public void eliminarTurnoPorId(int id) {
         TurnoEntity turno = obtenerTurnoPorId(id);
         if (turno != null) {
             eliminarTurno(turno);
         }
-    }
+    }*/
 
     /**
      * Concatena fecha y hora en formato "yyyy-MM-dd HH:mm"
@@ -155,7 +148,6 @@ public class TurnoRepository {
         }
 
         try {
-            // Si la fecha viene en formato dd/MM/yyyy, la convertimos a yyyy-MM-dd
             String[] partesFecha = fecha.split("/");
             if (partesFecha.length == 3) {
                 // dd/MM/yyyy -> yyyy-MM-dd

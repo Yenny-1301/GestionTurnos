@@ -50,14 +50,14 @@ public class RegisterActivity extends AppCompatActivity {
         TextInputEditText passwordEditText = findViewById(R.id.textoPass);
         TextInputEditText passwordVerifEditText = findViewById(R.id.textoPassVerif);
 
-        // ⭐ FORZAR QUE INICIE COMO PASSWORD
+        // forzar que no se visualice la pass al comienzo
         contrasenia.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         contrasenia.setTypeface(android.graphics.Typeface.DEFAULT);
 
 
         // Toggle mostrar contraseña
         iconoPass.setOnClickListener(new View.OnClickListener() {
-            boolean visible = true; // ⭐ CAMBIAR A true (porque empieza oculta)
+            boolean visible = true;
 
             @Override
             public void onClick(View v) {
@@ -191,12 +191,11 @@ public class RegisterActivity extends AppCompatActivity {
                                     ViewGroup.LayoutParams.WRAP_CONTENT
                             );
 
-                            // ⭐ AGREGAR DESENFOQUE/OSCURECIMIENTO DEL FONDO
                             window.setFlags(
                                     WindowManager.LayoutParams.FLAG_DIM_BEHIND,
                                     WindowManager.LayoutParams.FLAG_DIM_BEHIND
                             );
-                            window.setDimAmount(0.8f); // 0.8 = más oscuro (prueba entre 0.6 - 0.9)
+                            window.setDimAmount(0.8f);
                         }
 
                         dialog.setCancelable(true);
