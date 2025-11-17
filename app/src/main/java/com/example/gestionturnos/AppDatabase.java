@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
                 TurnoEntity.class,
                 EstadoEntity.class
         },
-        version = 1,
+        version = 2,
         exportSchema = false
 )
 
@@ -35,6 +35,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "gestion_turnos.db")
+                            .fallbackToDestructiveMigration()
                             .addCallback(roomCallback)
                             .build();
                 }

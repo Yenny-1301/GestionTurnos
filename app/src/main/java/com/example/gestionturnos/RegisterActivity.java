@@ -33,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
 
+        EditText nombre = findViewById(R.id.textoNombre);
         EditText correo = findViewById(R.id.textoInput);
         EditText contrasenia = findViewById(R.id.textoPass);
         EditText contraseniaVerif = findViewById(R.id.textoPassVerif);
@@ -43,9 +44,11 @@ public class RegisterActivity extends AppCompatActivity {
         ImageView iconoPass = findViewById(R.id.iconoPass);
         ImageView iconoPassVerif = findViewById(R.id.iconoPassVerif);
 
+        TextInputLayout nameLayout = findViewById(R.id.nameInputLayout);
         TextInputLayout emailLayout = findViewById(R.id.emailInputLayout);
         TextInputLayout passwordLayout = findViewById(R.id.passwordInputLayout);
         TextInputLayout passwordVerifLayout = findViewById(R.id.passwordInputLayoutPass);
+        TextInputEditText nameEditText = findViewById(R.id.textoNombre);
         TextInputEditText emailEditText = findViewById(R.id.textoInput);
         TextInputEditText passwordEditText = findViewById(R.id.textoPass);
         TextInputEditText passwordVerifEditText = findViewById(R.id.textoPassVerif);
@@ -78,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-// Toggle mostrar contraseña para verificación
+        // Toggle mostrar contraseña para verificación
         iconoPassVerif.setOnClickListener(new View.OnClickListener() {
             boolean visible = true;
 
@@ -131,6 +134,13 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 boolean camposValidos = true;
+
+                if (nameEditText.getText().toString().trim().isEmpty()) {
+                    nameLayout.setError("Completar campo");
+                    camposValidos = false;
+                } else {
+                    nameLayout.setError(null);
+                }
                 // manejo de errores SE DEBE ACTUALIZAAR
                 if (emailEditText.getText().toString().trim().isEmpty()) {
                     emailLayout.setError("Completar campo");
@@ -163,6 +173,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (camposValidos) {
 
                     Usuario user = new Usuario();
+                    user.setNombre(nombre.getText().toString().trim());
                     user.setEmail( correo.getText().toString().trim());
                     user.setPassword(contrasenia.getText().toString().trim());
                     long id = repo.insertarUsuario(user);
@@ -219,6 +230,9 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (nameEditText.hasFocus()) {
+                    nameLayout.setError(null);
+                }
                 if (emailEditText.hasFocus()) {
                     emailLayout.setError(null);
                 }
@@ -234,6 +248,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         };
 
+        nameEditText.addTextChangedListener(clearErrorWatcher);
         emailEditText.addTextChangedListener(clearErrorWatcher);
         passwordEditText.addTextChangedListener(clearErrorWatcher);
         passwordVerifEditText.addTextChangedListener(clearErrorWatcher);

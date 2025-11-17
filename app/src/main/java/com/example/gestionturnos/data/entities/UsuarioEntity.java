@@ -11,6 +11,9 @@ public class UsuarioEntity {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
+    @ColumnInfo(name = "nombre")
+    public String nombre;
+
     @ColumnInfo(name = "correo_electronico")
     public String correoElectronico;
 
@@ -19,4 +22,12 @@ public class UsuarioEntity {
 
     @ColumnInfo(name = "fecha_creacion")
     public String fechaCreacion;
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 }

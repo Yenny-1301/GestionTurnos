@@ -24,6 +24,7 @@ public class UsuarioRepository {
         String fechaLegible = sdf.format(new Date());
 
         UsuarioEntity entity = new UsuarioEntity();
+        entity.nombre = usuario.getNombre();
         entity.correoElectronico = usuario.getEmail();
         entity.contrasena =  HashUtil.sha256(usuario.getPassword());
         entity.fechaCreacion = fechaLegible;

@@ -2,12 +2,14 @@ package com.example.gestionturnos;
 
 public class Usuario {
     private int id;
+    private String nombre;
     private String email;
     private String password;
     public Usuario() { }
 
     public Usuario(int id, String email, String password) {
         this.id = id;
+        this.nombre = nombre;
         this.email = email;
         this.password = password;
     }
@@ -19,6 +21,10 @@ public class Usuario {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getNombre() { return nombre; }
+
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
     public String getEmail() {
         return email;

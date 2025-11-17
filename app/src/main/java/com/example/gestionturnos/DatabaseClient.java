@@ -13,7 +13,9 @@ public class DatabaseClient {
                         context.getApplicationContext(),
                         AppDatabase.class,
                         "gestion_turnos.db"
-                ).allowMainThreadQueries()
+                )
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
                 .build();
     }
 

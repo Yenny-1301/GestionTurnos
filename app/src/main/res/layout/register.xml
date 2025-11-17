@@ -26,6 +26,61 @@
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="40sp"/>
         </LinearLayout>
+        <!--  Layout INPUT NOMBRE -->
+        <LinearLayout
+            android:id="@+id/campoNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="26dp"
+            android:layout_marginHorizontal="41dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="?attr/colorSurface"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="15dp">
+
+            <LinearLayout
+                android:id="@+id/inputNombre"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/nameInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundColor="?attr/inputBackground"
+                    app:boxBackgroundMode="filled"
+                    app:errorEnabled="true"
+                    app:errorTextAppearance="@style/ErrorTextStyle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textoNombre"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/colorOnSurface"
+                        android:hint="Nombre"
+                        android:inputType="textPersonName"
+                        android:minHeight="48dp"
+                        android:padding="8dp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iconoNombre"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="15dp"
+                android:contentDescription="Icono de nombre"
+                android:src="@drawable/outline_person_24"
+                android:scaleType="fitCenter"
+                app:tint="?attr/iconTint" />
+        </LinearLayout>
+
         <!--  Layout INPUT CORREO -->
         <LinearLayout
             android:id="@+id/campoCorreo"
