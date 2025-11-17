@@ -55,6 +55,8 @@ public class ServiciosFragment extends Fragment implements ServicioAdapter.OnEdi
 
         View view = inflater.inflate(R.layout.fragment_servicios, container, false);
 
+        repo = new ServicioRepository(requireContext());
+
         // Inicializar lista si no existe
         if (listaServicios == null) {
             listaServicios = new ArrayList<>();
@@ -119,6 +121,7 @@ public class ServiciosFragment extends Fragment implements ServicioAdapter.OnEdi
                         if (nuevoServicio != null) {
                             listaServicios.add(nuevoServicio);
                             adapter.notifyItemInserted(listaServicios.size() - 1);
+                            actualizarVisibilidad();
                         }
                 });
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_EDITADO, getViewLifecycleOwner(),
@@ -165,14 +168,39 @@ public class ServiciosFragment extends Fragment implements ServicioAdapter.OnEdi
         btnSi.setOnClickListener(v -> {
             dialog.dismiss();
 
-            // Eliminar del repositorio
-            repo.eliminarServicio(servicio.getId());
+            try {
+                // eliminar del repositorio
+                repo.eliminarServicio(servicio.getId());
 
-            // Eliminar de la lista y actualizar el adapter
-            listaServicios.remove(position);
-            adapter.notifyItemRemoved(position);
+                // eliminar de la lista y actualizar el adapter
+                listaServicios.remove(position);
+                adapter.notifyItemRemoved(position);
+                adapter.notifyItemRangeChanged(position, listaServicios.size());
+
+                // actualizar visibilidad del mensaje vacío
+                actualizarVisibilidad();
+
+                Toast.makeText(requireContext(), "Servicio eliminado", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(requireContext(), "Error al eliminar: " + e.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
         });
 
         dialog.show();
+    }
+    private void actualizarVisibilidad() {
+        TextView emptyView = getView() != null ? getView().findViewById(R.id.tvEmptyServicios) : null;
+
+        if (emptyView != null && recyclerView != null) {
+            if (listaServicios.isEmpty()) {
+                emptyView.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+            } else {
+                emptyView.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        }
     }
 }

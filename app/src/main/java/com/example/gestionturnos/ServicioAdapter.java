@@ -12,10 +12,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 
 import java.util.List;
+
 public class ServicioAdapter extends RecyclerView.Adapter<ServicioAdapter.ServicioViewHolder> {
     private List<Servicio> servicios;
-    private static OnEditClickListener onEditClickListener;
-    private static OnDeleteClickListener onDeleteClickListener;
+    private OnEditClickListener onEditClickListener;  // ← QUITAR static
+    private OnDeleteClickListener onDeleteClickListener;  // ← QUITAR static
 
     public ServicioAdapter(List<Servicio> servicios) {
         this.servicios = servicios;
@@ -24,16 +25,17 @@ public class ServicioAdapter extends RecyclerView.Adapter<ServicioAdapter.Servic
     public interface OnEditClickListener {
         void onEditClick(Servicio servicio);
     }
+
     public interface OnDeleteClickListener {
         void onDeleteClick(Servicio servicio, int position);
     }
 
-    public void setOnEditClickListener(ServicioAdapter.OnEditClickListener listener) {
-        onEditClickListener = listener;
+    public void setOnEditClickListener(OnEditClickListener listener) {  // ← Quitar ServicioAdapter.
+        this.onEditClickListener = listener;  // ← Agregar this.
     }
 
     public void setOnDeleteClickListener(OnDeleteClickListener listener) {
-        onDeleteClickListener = listener;
+        this.onDeleteClickListener = listener;  // ← Agregar this.
     }
 
     @NonNull
@@ -60,7 +62,7 @@ public class ServicioAdapter extends RecyclerView.Adapter<ServicioAdapter.Servic
 
         holder.btnEliminar.setOnClickListener(v -> {
             if (onDeleteClickListener != null) {
-                onDeleteClickListener.onDeleteClick(servicio, position);
+                onDeleteClickListener.onDeleteClick(servicio, holder.getAdapterPosition());  // ← Usar getAdapterPosition() en lugar de position
             }
         });
     }
@@ -69,11 +71,21 @@ public class ServicioAdapter extends RecyclerView.Adapter<ServicioAdapter.Servic
     public int getItemCount() {
         return servicios.size();
     }
+
+    // actualizar luego de eliminar
+    public void eliminarServicio(int position) {
+        if (position >= 0 && position < servicios.size()) {
+            servicios.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, servicios.size());
+        }
+    }
+
     static class ServicioViewHolder extends RecyclerView.ViewHolder {
         TextView txtServicio, txtMinuto, txtPrecio;
         MaterialButton btnEditar, btnEliminar;
 
-        public ServicioViewHolder (@NonNull View itemView){
+        public ServicioViewHolder(@NonNull View itemView) {
             super(itemView);
             txtServicio = itemView.findViewById(R.id.NombreServicio);
             txtMinuto = itemView.findViewById(R.id.detalleServicioMinutos);
