@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                 usuarioExistente = repo.validarLogin(correo.getText().toString(), contrasenia.getText().toString());
 
                 if (!usuarioExistente) {
-                    correo.setError("Usuario Incorrecto");
+                    emailLayout.setError("Usuario Incorrecto");
                     camposValidos = false;
                 }
 

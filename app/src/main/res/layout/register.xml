@@ -247,33 +247,6 @@
                 app:tint="?attr/iconTint"/>
         </LinearLayout>
 
-        <!--  COPY terminos y condiciones .... -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <CheckBox
-                android:id="@+id/checkbox_terminos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/azul"
-                android:buttonTint="@color/primaryViolet"
-                android:textSize="14sp"
-                android:layout_gravity="center"
-                android:text="He leído y acepto los Términos y condiciones"/>
-            <TextView
-                android:id="@+id/checkboxError"
-                android:textColor="@color/red"
-                android:textSize="12sp"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:textStyle="bold"
-                android:text=" "
-                android:layout_gravity="center"
-                android:layout_marginBottom="26dp"
-                />
-        </LinearLayout>
-
         <!--  BOTON INICIAR SESION .... -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/inicioSesion"
