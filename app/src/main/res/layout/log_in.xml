@@ -144,19 +144,6 @@
                 app:tint="?attr/iconTint"/>
         </LinearLayout>
 
-        <!-- OLVIDASTE CONTRASEÑA -->
-        <TextView
-            android:id="@+id/olvidastePass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="¿Olvidaste tu contraseña?"
-            android:textColor="@color/azul"
-            android:gravity="center"
-            android:layout_marginBottom="26dp"
-            android:clickable="true"
-            android:focusable="true"/>
-
         <!-- BOTÓN INICIAR SESIÓN -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/inicioSesion"

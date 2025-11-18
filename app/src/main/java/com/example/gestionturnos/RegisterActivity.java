@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -38,8 +39,6 @@ public class RegisterActivity extends AppCompatActivity {
         EditText contrasenia = findViewById(R.id.textoPass);
         EditText contraseniaVerif = findViewById(R.id.textoPassVerif);
         Button iniciarSesion = findViewById(R.id.inicioSesion);
-        CheckBox terminosCond = findViewById(R.id.checkbox_terminos);
-        TextView checkboxError = findViewById(R.id.checkboxError);
 
         ImageView iconoPass = findViewById(R.id.iconoPass);
         ImageView iconoPassVerif = findViewById(R.id.iconoPassVerif);
@@ -135,30 +134,32 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 boolean camposValidos = true;
 
+                //VALIDACION NOMBRE
                 if (nameEditText.getText().toString().trim().isEmpty()) {
                     nameLayout.setError("Completar campo");
                     camposValidos = false;
                 } else {
                     nameLayout.setError(null);
                 }
-                // manejo de errores SE DEBE ACTUALIZAAR
+                // VALIDACION CORREO
                 if (emailEditText.getText().toString().trim().isEmpty()) {
                     emailLayout.setError("Completar campo");
                     camposValidos = false;
+                }else if (!esEmailValido(emailEditText.getText().toString().trim())) {
+                    emailLayout.setError("Correo inválido");
+                    camposValidos = false;
                 }
 
+                //VALIDACION CONTRASENIA
                 if (passwordEditText.getText().toString().trim().isEmpty()) {
                     passwordLayout.setError("Completar campo");
+                    camposValidos = false;
+                }else if (!esContraseniaValida(passwordEditText.getText().toString().trim())) {
+                    passwordLayout.setError("Debe tener al menos 8 caracteres, una mayúscula y un caracter especial");
                     camposValidos = false;
                 }
                 if (!contrasenia.getText().toString().trim().equals(contraseniaVerif.getText().toString().trim())) {
                     contraseniaVerif.setError("Contraseña no coincide");
-                    camposValidos = false;
-                }
-                //el checkbox debe estar chequeado
-                if (!terminosCond.isChecked()){
-                    checkboxError.setVisibility(View.VISIBLE);
-                    checkboxError.setText("Debes aceptar los Términos y condiciones");
                     camposValidos = false;
                 }
 
@@ -183,9 +184,6 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                     mostrarDialogRegistro();}}
 
-                    //Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                    //startActivity(intent);
-                    //finish();
                     private void mostrarDialogRegistro() {
                         Dialog dialog = new Dialog(RegisterActivity.this);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -252,4 +250,11 @@ public class RegisterActivity extends AppCompatActivity {
         passwordEditText.addTextChangedListener(clearErrorWatcher);
         passwordVerifEditText.addTextChangedListener(clearErrorWatcher);
     }
-};
+    private boolean esEmailValido(String email) {
+        return email != null && Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+    private boolean esContraseniaValida(String pass) {
+        String regex = "^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=?]).{8,}$";
+        return pass != null && pass.matches(regex);
+    }
+}
