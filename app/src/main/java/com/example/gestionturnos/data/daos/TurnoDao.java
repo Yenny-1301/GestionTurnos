@@ -41,4 +41,45 @@ public interface TurnoDao {
 
     @Query("SELECT * FROM turnos WHERE usuario_id = :usuarioId AND estado_id = :estadoId")
     List<TurnoEntity> getTurnosByUsuarioYEstado(int usuarioId, int estadoId);
+
+    @Query(
+            "SELECT COUNT(*) " +
+                    "FROM turnos t " +
+                    "INNER JOIN estados e ON t.estado_id = e.id " +
+                    "WHERE t.usuario_id = :usuarioId " +
+                    "AND e.nombre = 'Pendiente' " +
+                    "AND strftime('%Y-%m', t.fecha_turno) = :yearMonth"
+    )
+    int countPendientesMes(int usuarioId, String yearMonth);
+
+    @Query(
+            "SELECT COUNT(*) " +
+                    "FROM turnos t " +
+                    "INNER JOIN estados e ON t.estado_id = e.id " +
+                    "WHERE t.usuario_id = :usuarioId " +
+                    "AND e.nombre = 'Confirmado' " +
+                    "AND strftime('%Y-%m', t.fecha_turno) = :yearMonth"
+    )
+    int countConfirmadosMes(int usuarioId, String yearMonth);
+
+    @Query(
+            "SELECT COUNT(*) " +
+                    "FROM turnos t " +
+                    "INNER JOIN estados e ON t.estado_id = e.id " +
+                    "WHERE t.usuario_id = :usuarioId " +
+                    "AND e.nombre = 'Cancelado' " +
+                    "AND strftime('%Y-%m', t.fecha_turno) = :yearMonth"
+    )
+    int countCanceladosMes(int usuarioId, String yearMonth);
+
+    @Query(
+            "SELECT IFNULL(SUM(s.precio), 0) " +
+                    "FROM turnos t " +
+                    "INNER JOIN estados e ON t.estado_id = e.id " +
+                    "INNER JOIN servicios s ON t.servicio_id = s.id " +
+                    "WHERE t.usuario_id = :usuarioId " +
+                    "AND e.nombre = 'Confirmado' " +
+                    "AND strftime('%Y-%m', t.fecha_turno) = :yearMonth"
+    )
+    double sumRendimientoMensual(int usuarioId, String yearMonth);
 }

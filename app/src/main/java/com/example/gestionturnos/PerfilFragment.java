@@ -19,6 +19,11 @@ import android.widget.TextView;
 import com.example.gestionturnos.data.entities.UsuarioEntity;
 import com.example.gestionturnos.data.repository.UsuarioRepository;
 import com.google.android.material.button.MaterialButton;
+import com.example.gestionturnos.data.repository.TurnoRepository;
+import java.text.SimpleDateFormat;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +35,12 @@ public class PerfilFragment extends Fragment {
     private TextView perfilNombre;
     private TextView perfilCorreo;
     private UsuarioRepository usuarioRepository;
+
+    private TextView montoTotal;
+    private TextView nroPend;
+    private TextView nroConf;
+    private TextView nroCan;
+    private TurnoRepository turnoRepository;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -97,6 +108,39 @@ public class PerfilFragment extends Fragment {
             perfilNombre.setText("Sin sesión");
             perfilCorreo.setText("-");
         }
+
+        montoTotal = view.findViewById(R.id.montoTotal);
+        nroPend    = view.findViewById(R.id.nroPend);
+        nroConf    = view.findViewById(R.id.nroConf);
+        nroCan     = view.findViewById(R.id.nroCan);
+
+        turnoRepository = new TurnoRepository(requireContext());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.getDefault());
+        String yearMonthActual = sdf.format(new Date());
+
+        if (userId != -1) {
+            int pendientesMes  = turnoRepository.obtenerPendientesMes(userId, yearMonthActual);
+            int confirmadosMes = turnoRepository.obtenerConfirmadosMes(userId, yearMonthActual);
+            int canceladosMes  = turnoRepository.obtenerCanceladosMes(userId, yearMonthActual);
+            double rendimiento = turnoRepository.obtenerRendimientoMensual(userId, yearMonthActual);
+
+            nroPend.setText(String.valueOf(pendientesMes));
+            nroConf.setText(String.valueOf(confirmadosMes));
+            nroCan.setText(String.valueOf(canceladosMes));
+
+            DecimalFormat df = new DecimalFormat("#,###");
+            String textoRendimiento = df.format(Math.round(rendimiento)) + "$";
+            montoTotal.setText(textoRendimiento);
+
+        } else {
+            // Si no hay usuario logueado, dejamos todo en 0
+            nroPend.setText("0");
+            nroConf.setText("0");
+            nroCan.setText("0");
+            montoTotal.setText("0$");
+        }
+
 
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_perfil, container, false);

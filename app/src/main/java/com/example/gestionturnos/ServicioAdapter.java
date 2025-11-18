@@ -51,8 +51,26 @@ public class ServicioAdapter extends RecyclerView.Adapter<ServicioAdapter.Servic
         Servicio servicio = servicios.get(position);
 
         holder.txtServicio.setText(servicio.getNombreServicio());
-        holder.txtMinuto.setText(servicio.getMinutos());
-        holder.txtPrecio.setText(servicio.getPrecio());
+
+        String minutos = servicio.getMinutos();
+        String precioTexto = servicio.getPrecio();
+
+        String precioFormateado = precioTexto;
+        try {
+            double precioDouble = Double.parseDouble(precioTexto);
+            long precioEntero = Math.round(precioDouble);
+            precioFormateado = String.valueOf(precioEntero);
+        } catch (NumberFormatException e) {
+            precioFormateado = precioTexto;
+        }
+
+        String detalle = minutos + " min - $" + precioFormateado;
+
+        holder.txtMinuto.setText(detalle);
+
+        holder.txtPrecio.setText("");
+        holder.txtPrecio.setVisibility(View.GONE);
+
 
         holder.btnEditar.setOnClickListener(v -> {
             if (onEditClickListener != null) {

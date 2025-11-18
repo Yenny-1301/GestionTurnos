@@ -142,6 +142,22 @@ public class TurnoRepository {
      * @param hora en formato "HH:mm"
      * @return String con fecha y hora concatenados
      */
+
+    public int obtenerPendientesMes(int usuarioId, String yearMonth) {
+        return db.turnoDao().countPendientesMes(usuarioId, yearMonth);
+    }
+
+    public int obtenerConfirmadosMes(int usuarioId, String yearMonth) {
+        return db.turnoDao().countConfirmadosMes(usuarioId, yearMonth);
+    }
+
+    public int obtenerCanceladosMes(int usuarioId, String yearMonth) {
+        return db.turnoDao().countCanceladosMes(usuarioId, yearMonth);
+    }
+
+    public double obtenerRendimientoMensual(int usuarioId, String yearMonth) {
+        return db.turnoDao().sumRendimientoMensual(usuarioId, yearMonth);
+    }
     private String concatenarFechaHora(String fecha, String hora) {
         if (fecha == null || hora == null) {
             return obtenerFechaActual();
