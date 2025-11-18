@@ -46,4 +46,8 @@ public class UsuarioRepository {
         return usuario.contrasena.equals(passwordEncriptada);
     }
 
+    public UsuarioEntity obtenerUsuarioPorId(int id) {
+        return db.usuarioDao().findById(id);
+    }
+
 }

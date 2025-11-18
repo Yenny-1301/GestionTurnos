@@ -14,7 +14,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.gestionturnos.data.entities.UsuarioEntity;
+import com.example.gestionturnos.data.repository.UsuarioRepository;
 import com.google.android.material.button.MaterialButton;
 
 /**
@@ -23,6 +26,10 @@ import com.google.android.material.button.MaterialButton;
  * create an instance of this fragment.
  */
 public class PerfilFragment extends Fragment {
+
+    private TextView perfilNombre;
+    private TextView perfilCorreo;
+    private UsuarioRepository usuarioRepository;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -68,6 +75,28 @@ public class PerfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
+
+        perfilNombre = view.findViewById(R.id.perfilNombre);
+        perfilCorreo = view.findViewById(R.id.perfilCorreo);
+
+        usuarioRepository = new UsuarioRepository(requireContext());
+
+        int userId = SessionManager.obtenerUsuarioActivo(requireContext());
+
+        if (userId != -1) {
+            UsuarioEntity usuario = usuarioRepository.obtenerUsuarioPorId(userId);
+
+            if (usuario != null) {
+                perfilNombre.setText(usuario.nombre);
+                perfilCorreo.setText(usuario.correoElectronico);
+            } else {
+                perfilNombre.setText("Usuario no encontrado");
+                perfilCorreo.setText("-");
+            }
+        } else {
+            perfilNombre.setText("Sin sesión");
+            perfilCorreo.setText("-");
+        }
 
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_perfil, container, false);
