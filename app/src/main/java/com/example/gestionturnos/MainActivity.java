@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements TurnosFragment.Na
             finish();
             return;
         }
-        DynamicColors.applyToActivitiesIfAvailable(MainActivity.this.getApplication());
+        //DynamicColors.applyToActivitiesIfAvailable(MainActivity.this.getApplication());
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         //cargar turnos como HOME

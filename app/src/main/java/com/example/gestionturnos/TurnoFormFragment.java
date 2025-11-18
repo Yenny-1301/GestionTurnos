@@ -4,9 +4,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import android.text.TextUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
@@ -18,6 +22,7 @@ import com.example.gestionturnos.data.repository.TurnoRepository;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
@@ -94,6 +99,21 @@ public class TurnoFormFragment extends Fragment {
         etHora.setClickable(true);
 
         cargarServicios();
+
+        addClearErrorOnChange(etNombre);
+        addClearErrorOnChange(etApellido);
+        addClearErrorOnChange(etTelefono);
+        addClearErrorOnChange(etFecha);
+        addClearErrorOnChange(etHora);
+        addClearErrorOnChange(etNotas);
+
+        actvServicio.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(Editable s) {
+                clearFieldError(actvServicio);
+            }
+        });
 
         btnGuardar.setOnClickListener(v -> guardarTurno());
         btnCancelar.setOnClickListener(v -> closeFragment());
@@ -246,43 +266,113 @@ public class TurnoFormFragment extends Fragment {
     }
 
     private boolean validarCampos() {
-        if (etNombre.getText().toString().trim().isEmpty()) {
-            etNombre.setError("Campo requerido");
-            etNombre.requestFocus();
-            return false;
+
+        boolean esValido = true;
+
+        String nombre   = etNombre.getText().toString().trim();
+        String apellido = etApellido.getText().toString().trim();
+        String telefono = etTelefono.getText().toString().trim();
+        String servicio = actvServicio.getText().toString().trim();
+        String fecha    = etFecha.getText().toString().trim();
+        String hora     = etHora.getText().toString().trim();
+
+        if (TextUtils.isEmpty(nombre)) {
+            setFieldError(etNombre, "Completar campo");
+            esValido = false;
         }
 
-        if (etApellido.getText().toString().trim().isEmpty()) {
-            etApellido.setError("Campo requerido");
-            etApellido.requestFocus();
-            return false;
+        if (TextUtils.isEmpty(apellido)) {
+            setFieldError(etApellido, "Completar campo");
+            esValido = false;
         }
 
-        if (etTelefono.getText().toString().trim().isEmpty()) {
-            etTelefono.setError("Campo requerido");
-            etTelefono.requestFocus();
-            return false;
+        if (TextUtils.isEmpty(telefono)) {
+            setFieldError(etTelefono, "Completar campo");
+            esValido = false;
         }
 
-        if (actvServicio.getText().toString().trim().isEmpty()) {
-            actvServicio.setError("Seleccione un servicio");
-            actvServicio.requestFocus();
-            return false;
+        if (TextUtils.isEmpty(servicio)) {
+            setFieldError(actvServicio, "Seleccionar servicio");
+            esValido = false;
         }
 
-        if (etFecha.getText().toString().trim().isEmpty()) {
-            etFecha.setError("Campo requerido");
-            etFecha.requestFocus();
-            return false;
+        if (TextUtils.isEmpty(fecha)) {
+            setFieldError(etFecha, "Completar campo");
+            esValido = false;
         }
 
-        if (etHora.getText().toString().trim().isEmpty()) {
-            etHora.setError("Campo requerido");
-            etHora.requestFocus();
-            return false;
+        if (TextUtils.isEmpty(hora)) {
+            setFieldError(etHora, "Completar campo");
+            esValido = false;
         }
 
-        return true;
+        if (!esValido) {
+            Toast.makeText(requireContext(),
+                    "Completá correctamente todos los campos obligatorios",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        return esValido;
+    }
+
+    /** Limpia error cuando cambia el texto de un TextInputEditText */
+    private void addClearErrorOnChange(TextInputEditText editText) {
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                clearFieldError(editText);
+            }
+        });
+    }
+
+    /** Aplica error SOLO al TextInputLayout (sin icono en el campo) */
+    private void setFieldError(TextInputEditText editText, String mensaje) {
+        TextInputLayout til = findTextInputLayout(editText);
+        if (til != null) {
+            til.setError(mensaje);
+            til.setErrorEnabled(true);
+        }
+    }
+
+    /** Versión para AutoCompleteTextView (servicio) */
+    private void setFieldError(AutoCompleteTextView view, String mensaje) {
+        TextInputLayout til = findTextInputLayout(view);
+        if (til != null) {
+            til.setError(mensaje);
+            til.setErrorEnabled(true);
+        }
+    }
+
+    /** Limpia error del TextInputLayout asociado a un TextInputEditText */
+    private void clearFieldError(TextInputEditText editText) {
+        TextInputLayout til = findTextInputLayout(editText);
+        if (til != null) {
+            til.setError(null);
+            til.setErrorEnabled(false);
+        }
+    }
+
+    /** Limpia error del TextInputLayout asociado al AutoCompleteTextView */
+    private void clearFieldError(AutoCompleteTextView view) {
+        TextInputLayout til = findTextInputLayout(view);
+        if (til != null) {
+            til.setError(null);
+            til.setErrorEnabled(false);
+        }
+    }
+
+    /** Busca el TextInputLayout padre de una vista (campo) */
+    private TextInputLayout findTextInputLayout(View view) {
+        ViewParent parent = view.getParent();
+        while (parent != null) {
+            if (parent instanceof TextInputLayout) {
+                return (TextInputLayout) parent;
+            }
+            parent = parent.getParent();
+        }
+        return null;
     }
 
     @Override
